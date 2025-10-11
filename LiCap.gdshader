@@ -14,8 +14,8 @@ void fragment ()
 	vec3 view_normal = -normalize(NORMAL);
 	vec2 matcap_uv = view_normal.xy*0.5+0.5;
 	vec3 matcap = texture(licap_texture,matcap_uv).rgb;
-	
-	
+
+
 	//ALBEDO = texture(licap_texture,UV).rgb;
 	//ALBEDO = NORMAL *0.5 + 0.5;
 	//ALBEDO = matcap;
@@ -32,14 +32,14 @@ void light() {
 	//U coordinates [light]
 	float u = dot(normal, right);
 	float v = dot(normal, light_dir);
-	
+
 
 
 	vec2 licap_UV = vec2(u,v)*0.5+0.5;
 	vec3 licap = texture(licap_texture,licap_UV).rgb;
 	licap = pow(licap,vec3(2.2));
 	float alignment = dot(normal,light_dir);
-	
+
 	licap = pow(licap, vec3(1.0/light_intensity));
 
 	DIFFUSE_LIGHT = licap; //*ATTENUATION*LIGHT_COLOR   //* ALBEDO;vec3(alignment) * ATTENUATION;

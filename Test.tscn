@@ -1,14 +1,14 @@
 [gd_scene load_steps=7 format=3 uid="uid://dcuqid155ecjx"]
 
 [ext_resource type="Shader" uid="uid://b06ligm51i2nd" path="res://LiCap.gdshader" id="1_myinc"]
-[ext_resource type="Texture2D" path="res://Src/Spiderverse_MatCap.png" id="2_njov2"]
-[ext_resource type="Script" path="res://Scripts/Light System/scene_light_control.gd" id="3_2au82"]
-[ext_resource type="Script" path="res://Scripts/Light System/custom_light.gd" id="3_8tn2x"]
+[ext_resource type="Texture2D" uid="uid://dt00fu3gx13m0" path="res://Src/Spiderverse_MatCap.jpg" id="2_8tn2x"]
+[ext_resource type="Script" uid="uid://dlux4mh2cxpb3" path="res://scene_light_control.gd" id="3_2au82"]
+[ext_resource type="Script" uid="uid://cei0pjax1yi78" path="res://custom_light.gd" id="3_8tn2x"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_njov2"]
 render_priority = 0
 shader = ExtResource("1_myinc")
-shader_parameter/licap_texture = ExtResource("2_njov2")
+shader_parameter/licap_texture = ExtResource("2_8tn2x")
 shader_parameter/light_intensity = 3.195
 
 [sub_resource type="SphereMesh" id="SphereMesh_rvu7i"]
@@ -19,11 +19,13 @@ material = SubResource("ShaderMaterial_njov2")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_rvu7i")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
+[node name="OmniLight3D" type="OmniLight3D" parent="." node_paths=PackedStringArray("light_control")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.448211, 0.368049, 1.34962)
 light_color = Color(0.71835, 0.702838, 0.684975, 1)
 script = ExtResource("3_8tn2x")
+light_control = NodePath("../SceneLightControl")
 light_control_initialized = true
+light_id_set = true
 
 [node name="SceneLightControl" type="Node" parent="."]
 script = ExtResource("3_2au82")

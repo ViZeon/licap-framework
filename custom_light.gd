@@ -8,6 +8,9 @@ extends Node
 		light_control = detected_conrol
 @export var light_control_initialized = false
 
+@export var light_id_set: bool
+@export var light_id: int
+
 func _ready() -> void:
 	find_light_control()
 
@@ -16,8 +19,8 @@ func _process(delta: float) -> void:
 		find_light_control()
 		notify_property_list_changed()
 		light_control_initialized = true
-		light_control.register_light(self)
+		light_id = light_control.register_light(self)
 
 func find_light_control():
-	light_control = get_owner().find_child("scene_light_control")
+	light_control = get_owner().find_child("SceneLightControl")
 	print (light_control)
