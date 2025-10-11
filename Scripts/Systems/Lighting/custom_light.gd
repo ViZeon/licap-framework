@@ -8,8 +8,7 @@ extends Node
 		light_control = detected_conrol
 @export var light_control_initialized = false
 
-@export var light_id_set: bool
-@export var light_id: int
+@export var light_id: int = -1
 
 func _ready() -> void:
 	find_light_control()
