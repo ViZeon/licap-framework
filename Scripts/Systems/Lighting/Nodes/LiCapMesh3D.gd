@@ -1,32 +1,43 @@
 @tool
 extends MeshInstance3D
-class_name LiCapObject
+class_name LiCapMesh3D
 
 var affecting_lights: Array[LiCapLight] = []
 var collision_body: StaticBody3D
+var shape: CollisionShape3D
+
+@export var collision_set = false
 
 func _ready():
-	setup_collision()
-
+	setup()
+func _process(delta: float) -> void:
+	setup()
+	
+func setup():
+	if not collision_set:
+		if not mesh == null:
+			setup_collision()
+		collision_set = true
+		
 func setup_collision():
 	if get_parent() is StaticBody3D:
 		collision_body = get_parent()
-		return
-	
 	collision_body = StaticBody3D.new()
 	get_parent().add_child(collision_body)
 	collision_body.owner = owner
-	
+
 	# Move this mesh under the body
 	get_parent().remove_child(self)
 	collision_body.add_child(self)
 	owner = collision_body.owner
-	
+
 	# Auto-create collision from mesh
-	var shape = CollisionShape3D.new()
+	shape = CollisionShape3D.new()
 	shape.shape = mesh.create_trimesh_shape()
 	collision_body.add_child(shape)
 	shape.owner = owner
+	return
+
 
 func add_light(light: LiCapLight):
 	if light not in affecting_lights:

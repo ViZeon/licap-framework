@@ -55,7 +55,9 @@ func setup_detection_area():
 		sphere.radius = light_range
 		detection_area.add_child(shape)
 		shape.owner = owner
-
+	
+	detection_area.collision_layer = 0
+	detection_area.collision_mask = 1<<19
 	detection_area.body_entered.connect(_on_object_entered)
 	detection_area.body_exited.connect(_on_object_exited)
 
