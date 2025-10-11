@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://y1efon4wxvbi"]
+
+[ext_resource type="Shader" uid="uid://b06ligm51i2nd" path="res://LiCap.gdshader" id="1_cncbx"]
+[ext_resource type="Texture2D" uid="uid://8y08p07f8m56" path="res://Src/Prototype_LiCap.jpg" id="2_42u3b"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_cncbx")
+shader_parameter/licap_texture = ExtResource("2_42u3b")
+shader_parameter/light_intensity = 5.0
+shader_parameter/light_position_w = Vector3(0.275, 0.59, 0.685)
