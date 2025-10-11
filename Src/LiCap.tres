@@ -7,5 +7,4 @@
 render_priority = 0
 shader = ExtResource("1_cncbx")
 shader_parameter/licap_texture = ExtResource("2_42u3b")
-shader_parameter/light_intensity = 5.0
-shader_parameter/light_position_w = Vector3(0.275, 0.59, 0.685)
+shader_parameter/light_position_w = Vector3(3.04157, -1.43847, -1.74464)
