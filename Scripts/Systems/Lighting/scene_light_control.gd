@@ -11,14 +11,12 @@ func _process(delta: float) -> void:
 		scene_lights = []
 
 func register_light(light_node):
-	#replace with code for cycling through the list and checking if the light is registered
-	if  light_node.light_id == -1:
+	#needs a double check for empty slots and cleanup later
+	if  not light_node in scene_lights:
 		scene_lights.append(light_node)
 		print("Registered light. New Count: ", scene_lights.size())
-		tmp_index = scene_lights.size() -1
-	else:
-		tmp_index = light_node.light_id
-	return tmp_index
+
+	return scene_lights.find(light_node)
 
 func register_object(object_node):
 	scene_objects.append(object_node)
