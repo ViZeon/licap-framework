@@ -1,9 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dcuqid155ecjx"]
+[gd_scene load_steps=8 format=3 uid="uid://dcuqid155ecjx"]
 
 [ext_resource type="Shader" uid="uid://b06ligm51i2nd" path="res://LiCap.gdshader" id="1_myinc"]
 [ext_resource type="Texture2D" uid="uid://dt00fu3gx13m0" path="res://Src/Spiderverse_MatCap.jpg" id="2_8tn2x"]
 [ext_resource type="Script" uid="uid://dlux4mh2cxpb3" path="res://Scripts/Systems/Lighting/scene_light_control.gd" id="3_2au82"]
-[ext_resource type="Script" uid="uid://cei0pjax1yi78" path="res://Scripts/Systems/Lighting/custom_light.gd" id="3_8tn2x"]
+[ext_resource type="Script" uid="uid://wnpprgsc35gp" path="res://Scripts/Systems/Lighting/Nodes/LiCapLight.gd" id="5_aq4fw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_njov2"]
 render_priority = 0
@@ -14,6 +14,34 @@ shader_parameter/light_intensity = 3.195
 [sub_resource type="SphereMesh" id="SphereMesh_rvu7i"]
 material = SubResource("ShaderMaterial_njov2")
 
+[sub_resource type="GDScript" id="GDScript_8tn2x"]
+script/source = "@tool
+extends Node
+
+@export var light_control: Node: 
+	get:
+		return light_control
+	set(detected_conrol):
+		light_control = detected_conrol
+@export var light_control_initialized = false
+
+@export var light_id: int = -1
+
+func _ready() -> void:
+	find_light_control()
+
+func _process(delta: float) -> void:
+	if not light_control_initialized:
+		find_light_control()
+		notify_property_list_changed()
+		light_control_initialized = true
+		light_id = light_control.register_light(self)
+
+func find_light_control():
+	light_control = get_owner().find_child(\"SceneLightControl\")
+	print (light_control)
+"
+
 [node name="Node3D" type="Node3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -22,11 +50,18 @@ mesh = SubResource("SphereMesh_rvu7i")
 [node name="OmniLight3D" type="OmniLight3D" parent="." node_paths=PackedStringArray("light_control")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.448211, 0.368049, 1.34962)
 light_color = Color(0.71835, 0.702838, 0.684975, 1)
-script = ExtResource("3_8tn2x")
+script = SubResource("GDScript_8tn2x")
 light_control = NodePath("../SceneLightControl")
 light_control_initialized = true
 light_id = 0
 
 [node name="SceneLightControl" type="Node" parent="." node_paths=PackedStringArray("scene_lights")]
 script = ExtResource("3_2au82")
-scene_lights = [NodePath("../OmniLight3D")]
+scene_lights = [NodePath("../LiCapLight")]
+
+[node name="LiCapLight" type="Node3D" parent="." node_paths=PackedStringArray("light_control")]
+script = ExtResource("5_aq4fw")
+light_control = NodePath("../SceneLightControl")
+light_control_initialized = true
+light_id = 0
+metadata/_custom_type_script = "uid://wnpprgsc35gp"
