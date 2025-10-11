@@ -47,6 +47,8 @@ radius = 1.083
 
 [node name="Node3D" type="Node3D"]
 
+[node name="CSGTorus3D" type="CSGTorus3D" parent="."]
+
 [node name="OmniLight3D" type="OmniLight3D" parent="." node_paths=PackedStringArray("light_control")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.195406, 0.368049, 0.796858)
 visible = false
@@ -75,7 +77,6 @@ collision_set = true
 metadata/_custom_type_script = "uid://yb3tmhg57mvr"
 
 [node name="LiCapLight" type="Node3D" parent="." node_paths=PackedStringArray("detection_area", "shape", "light_control")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2052, 0.813759, -0.10814)
 script = ExtResource("5_aq4fw")
 licap_mat = ExtResource("2_8tn2x")
 light_var_name = "light_position_w"
@@ -97,3 +98,5 @@ collision_mask = 524288
 [node name="@CollisionShape3D@37145" type="CollisionShape3D" parent="LiCapLight/@Area3D@37144"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.323572, 0.00748003, -0.378158)
 shape = SubResource("SphereShape3D_8tn2x")
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="LiCapLight"]
