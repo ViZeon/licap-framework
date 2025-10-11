@@ -12,6 +12,8 @@ class_name LiCapLight
 @export var shape: CollisionShape3D
 @export	var sphere: SphereShape3D
 
+@export var bodies: Array[Node3D]
+
 @export var light_control: Node: 
 	get:
 		return light_control
@@ -19,11 +21,19 @@ class_name LiCapLight
 		light_control = detected_conrol
 
 
+var currObject
+
 func _ready() -> void:
 	setup()
 
 func _process(delta: float) -> void:
 	setup()
+	bodies = detection_area.get_overlapping_bodies()
+	for body in bodies:
+		print("Overlapping: ", body.name)
+		for child in body.get_children():
+			if child is LiCapMesh3D:
+				child.add_light(self)
 
 func  setup():	
 	if not detection_area_initialized:
@@ -62,9 +72,14 @@ func setup_detection_area():
 	detection_area.body_exited.connect(_on_object_exited)
 
 
-func _on_object_entered(body):
-	if body.has_method("add_light"):
-		body.add_light(self)
+func _on_object_entered(body:Node):
+	currObject = null
+	print("something is colliding")
+	currObject = body.find_child("*",true,false) as LiCapMesh3D
+	print(currObject)
+		
+	#has_method("add_light"):
+		#body.add_light(self)
 
 func _on_object_exited(body):
 	if body.has_method("remove_light"):

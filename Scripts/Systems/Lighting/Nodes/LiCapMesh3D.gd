@@ -22,8 +22,9 @@ func setup():
 func setup_collision():
 	if get_parent() is StaticBody3D:
 		collision_body = get_parent()
-	collision_body = StaticBody3D.new()
-	get_parent().add_child(collision_body)
+	else: 
+		collision_body = StaticBody3D.new()
+		get_parent().add_child(collision_body)
 	collision_body.owner = owner
 
 	# Move this mesh under the body
@@ -32,10 +33,15 @@ func setup_collision():
 	owner = collision_body.owner
 
 	# Auto-create collision from mesh
-	shape = CollisionShape3D.new()
-	shape.shape = mesh.create_trimesh_shape()
+	if shape == null:
+		shape = CollisionShape3D.new()
+	shape.shape = mesh.create_convex_shape()
 	collision_body.add_child(shape)
 	shape.owner = owner
+	
+	collision_body.collision_layer = 1<<19
+	collision_body.collision_mask = 0
+	
 	return
 
 
