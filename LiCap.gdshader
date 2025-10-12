@@ -13,7 +13,7 @@ varying vec3 world_normal;
 
 // Uniforms for gradient control points
 uniform int num_gradient_points = 2;
-uniform vec4 gradient_stops[16]: source_color;  // RGB = color, A = position
+uniform sampler2D gradient_stops[16]:  source_color, filter_linear;//source_color;  // RGB = color, A = position
 
 uniform float uv_smoothing : hint_range(0.0, 0.5) = 0.0;
 
@@ -152,13 +152,13 @@ vec3 blend_divide(vec3 base, vec3 blend, float factor) {
 }
 
 
-vec3 evaluate_color_ramp(float input_value) {
+vec3 evaluate_color_ramp(float input_value, vec2 uv) {
     input_value = clamp(input_value, 0.0, 1.0);
 
     // Find surrounding stops
     int left_idx = 0;
     for (int i = 0; i < num_gradient_points - 1; i++) {
-        if (input_value >= gradient_stops[i].a) {
+        if (input_value >= texture(gradient_stops[i], uv).a) {
             left_idx = i;
         }
     }
@@ -166,11 +166,11 @@ vec3 evaluate_color_ramp(float input_value) {
     int right_idx = min(left_idx + 1, num_gradient_points - 1);
 
     // Interpolate
-    float left_pos = gradient_stops[left_idx].a;
-    float right_pos = gradient_stops[right_idx].a;
+    float left_pos = texture(gradient_stops[left_idx], uv).a;
+    float right_pos = texture(gradient_stops[right_idx], uv).a;
     float blend = (input_value - left_pos) / (right_pos - left_pos + 0.0001);
 
-    return mix(gradient_stops[left_idx].rgb, gradient_stops[right_idx].rgb, blend);
+    return mix(texture(gradient_stops[left_idx], uv).rgb, texture(gradient_stops[right_idx], uv).rgb, blend);
 }
 
 void vertex() {
@@ -230,7 +230,7 @@ smooth_normal = normalize(mix(smooth_normal, normal_from_map, normal_map_strengt
 	float mask_value = texture(licap_texture, uv_coords).r;
 
 	//ALBEDO = final_color;
-		vec3 color_filter_01 = blend_overlay(color.rgb, evaluate_color_ramp(mask_value), 1);
+		vec3 color_filter_01 = blend_overlay(color.rgb, evaluate_color_ramp(mask_value, UV), 1);
 	// Get base albedo
 	    vec3 base_color = texture(diffuse_texture, UV).rgb;
 
