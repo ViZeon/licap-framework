@@ -23,6 +23,36 @@ uniform float max_derivative = 0.1;
 varying vec3 tangent_w;
 varying vec3 binormal_w;
 
+uniform vec3 shadow_tint = vec3(0.6, 0.7, 1.0); // Cool shadows
+uniform vec3 highlight_tint = vec3(1.0, 0.95, 0.85); // Warm highlights
+uniform float shadow_hue_shift = -0.05; // Hue shift in shadows (negative = toward blue)
+uniform float highlight_hue_shift = 0.03; // Hue shift in highlights (positive = toward yellow)
+uniform float saturation_boost = 1.2; // Midtone saturation multiplier
+uniform float dark_saturation_boost = 1.0; // Multiplier for dark areas
+
+// RGB to HSV conversion
+vec3 rgb2hsv(vec3 c) {
+    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
+    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+    float d = q.x - min(q.w, q.y);
+    float e = 1.0e-10;
+    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+}
+
+// HSV to RGB conversion
+vec3 hsv2rgb(vec3 c) {
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+// Saturation curve - peaks in midtones
+float saturation_curve(float luminance) {
+    // Parabolic curve peaking around 0.5
+    float mid_boost = 1.0 - 4.0 * pow(luminance - 0.5, 2.0);
+    return mix(0.7, saturation_boost, mid_boost);
+}
 // Normal
 vec3 blend_normal(vec3 base, vec3 blend, float factor) {
     return mix(base, blend, factor);
@@ -198,8 +228,40 @@ smooth_normal = normalize(mix(smooth_normal, normal_from_map, normal_map_strengt
 	vec4 color = texture(diffuse_texture,UV);
 
 	float mask_value = texture(licap_texture, uv_coords).r;
-	vec3 final_color = blend_soft_light( evaluate_color_ramp(mask_value),color.rgb, 1);
-	ALBEDO = final_color;
 
-	//ALBEDO = vec3(remapped);
-}
+	//ALBEDO = final_color;
+	// Get base albedo
+	    vec3 base_color = texture(diffuse_texture, UV).rgb;
+
+	    // Your LUT lighting result goes here
+	    // For demo purposes, using DIFFUSE_LIGHT as stand-in
+	    float lighting = evaluate_color_ramp(mask_value).r;//dot(mask_value, vec3(0.299, 0.587, 0.114)); // Luminance
+
+	    // Convert to HSV
+	    vec3 hsv = rgb2hsv(base_color);
+
+	    // Hue shift based on lighting
+	    float hue_shift = mix(shadow_hue_shift, highlight_hue_shift, lighting);
+	    hsv.x = fract(hsv.x + hue_shift);
+
+	    // Saturation adjustment based on lighting
+	    float sat_mult = saturation_curve(lighting);
+	    //hsv.y *= sat_mult;
+		float dark_boost = mix(dark_saturation_boost, 1.0, lighting);
+		hsv.y *= sat_mult * dark_boost;
+
+	    // Convert back to RGB
+	    vec3 shifted_color = hsv2rgb(hsv);
+
+	    // Temperature tinting
+	    vec3 temp_tint = mix(shadow_tint, highlight_tint, lighting);
+	    shifted_color *= temp_tint;
+
+
+		vec3 color_filter_01 = blend_overlay(  shifted_color.rgb,evaluate_color_ramp(mask_value), 1);
+	//vec3 color_filter_02 = blend_soft_light( evaluate_color_ramp(mask_value),color.rgb, 1);
+	vec3 final_color = color_filter_01;
+
+	    ALBEDO = final_color;
+	}
+		//ALBEDO = vec3(remapped);
