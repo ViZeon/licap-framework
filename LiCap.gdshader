@@ -3,7 +3,7 @@ shader_type spatial;
 render_mode unshaded;
 
 uniform sampler2D normal_map : hint_normal, filter_linear;
-uniform float normal_map_strength : hint_range(0.0, 1.0) = 1.0;
+uniform float normal_map_strength : hint_range(0.0, 5.0) = 1.0;
 uniform sampler2D diffuse_texture: hint_default_white, source_color, filter_linear;
 uniform sampler2D licap_texture : hint_default_white, source_color, filter_linear, repeat_disable;
 uniform vec3 light_position_w;
@@ -173,19 +173,32 @@ void fragment() {
 	}
 
 
-	// Simple normal map blend
-vec3 normal_map_sample = texture(normal_map, UV).rgb * 2.0 - 1.0;
-smooth_normal = normalize(smooth_normal + normal_map_sample * normal_map_strength);
+	// Blend normal map using mesh UVs
+	//vec3 normal_map_sample = texture(normal_map, UV).rgb * 2.0 - 1.0;
+	//smooth_normal = normalize(smooth_normal + normal_map_sample * normal_map_strength);
 
+
+	// Sample and transform normal map to world space
+
+vec3 normal_map_sample = texture(normal_map, UV).rgb * 2.0 - 1.0;
+normal_map_sample.x = -normal_map_sample.x; // Flip Y
+
+vec3 normal_from_map = normalize(
+    normal_map_sample.x * tangent_w +
+    normal_map_sample.y * binormal_w +
+    normal_map_sample.z * smooth_normal
+);
+
+smooth_normal = normalize(mix(smooth_normal, normal_from_map, normal_map_strength));
 
 	float u = dot(smooth_normal, light_right);
 	float v = dot(smooth_normal, light_up);
-	vec2 uv_coords = clamp(vec2(u, v) * 0.5 + 0.5, 0.0, 1.0);
+	vec2 uv_coords = clamp(vec2(-u, v) * 0.5 + 0.5, 0.0, 1.0);
 
 	vec4 color = texture(diffuse_texture,UV);
 
 	float mask_value = texture(licap_texture, uv_coords).r;
-	vec3 final_color = blend_overlay( color.rgb,evaluate_color_ramp(mask_value), 1);
+	vec3 final_color = blend_soft_light( evaluate_color_ramp(mask_value),color.rgb, 1);
 	ALBEDO = final_color;
 
 	//ALBEDO = vec3(remapped);

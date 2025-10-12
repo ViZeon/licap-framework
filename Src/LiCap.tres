@@ -9,12 +9,12 @@
 render_priority = 0
 shader = ExtResource("1_cncbx")
 shader_parameter/normal_map = ExtResource("4_iykpt")
-shader_parameter/normal_map_strength = 1.0
+shader_parameter/normal_map_strength = 0.676
 shader_parameter/diffuse_texture = ExtResource("2_rg4x5")
 shader_parameter/licap_texture = ExtResource("2_42u3b")
-shader_parameter/light_position_w = Vector3(-0.138556, 1.80821, 0.0864716)
+shader_parameter/light_position_w = Vector3(-0.14119, 1.87844, 0.216818)
 shader_parameter/num_gradient_points = 3
-shader_parameter/gradient_stops = PackedColorArray(0, 0, 0, 0, 0.57, 0.57, 0.57, 0.113725, 0.61, 0.61, 0.61, 0.831373)
+shader_parameter/gradient_stops = PackedColorArray(0, 0, 0, 0, 0.51, 0.51, 0.51, 0.270588, 0.61, 0.61, 0.61, 0.788235)
 shader_parameter/uv_smoothing = 0.0
 shader_parameter/normal_smoothing = 1.0
 shader_parameter/max_derivative = 100.0
