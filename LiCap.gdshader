@@ -230,7 +230,7 @@ smooth_normal = normalize(mix(smooth_normal, normal_from_map, normal_map_strengt
 	float mask_value = texture(licap_texture, uv_coords).r;
 
 	//ALBEDO = final_color;
-		vec3 color_filter_01 = blend_overlay(color.rgb, evaluate_color_ramp(mask_value, UV), 1);
+		vec3 color_filter_01 = blend_multiply(color.rgb,evaluate_color_ramp(mask_value, UV), mask_value*3.0);
 	// Get base albedo
 	    vec3 base_color = texture(diffuse_texture, UV).rgb;
 
