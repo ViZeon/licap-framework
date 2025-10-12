@@ -228,9 +228,10 @@ smooth_normal = normalize(mix(smooth_normal, normal_from_map, normal_map_strengt
 	vec4 color = texture(diffuse_texture,UV);
 
 	float mask_value = texture(licap_texture, uv_coords).r;
-
+	vec3 mask_col = texture(licap_texture, uv_coords).rgb;
+	//evaluate_color_ramp(mask_value, UV)
 	//ALBEDO = final_color;
-		vec3 color_filter_01 = blend_multiply(color.rgb,evaluate_color_ramp(mask_value, UV), mask_value*3.0);
+		vec3 color_filter_01 = blend_multiply(color.rgb,-mask_col, mask_value*3.0);
 	// Get base albedo
 	    vec3 base_color = texture(diffuse_texture, UV).rgb;
 
@@ -261,8 +262,16 @@ smooth_normal = normalize(mix(smooth_normal, normal_from_map, normal_map_strengt
 
 
 	//vec3 color_filter_02 = blend_soft_light( evaluate_color_ramp(mask_value),color.rgb, 1);
-	vec3 final_color = color_filter_01;
+	vec3 shadow_albedo = blend_multiply(color.rgb, color.rgb, 1);
+	vec3 final_color = blend_multiply(shadow_albedo,color.rgb, mask_value);
 
-	    ALBEDO = color_filter_01;
+	vec3 shadow_hsv = rgb2hsv(mask_col);
+	vec3 color_hsv = rgb2hsv(color.rgb);
+
+	vec3 mixed_hsv = vec3 (color_hsv.r, color_hsv.g,shadow_hsv.b* color_hsv.b);
+
+	vec3 combined_rgb = hsv2rgb(mixed_hsv);
+
+	    ALBEDO = combined_rgb;
 	}
 		//ALBEDO = vec3(remapped);
