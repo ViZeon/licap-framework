@@ -1,0 +1,8 @@
+[gd_resource type="GradientTexture1D" load_steps=2 format=3 uid="uid://bilmd31w6sd40"]
+
+[sub_resource type="Gradient" id="Gradient_irvrr"]
+interpolation_color_space = 2
+
+[resource]
+gradient = SubResource("Gradient_irvrr")
+use_hdr = true

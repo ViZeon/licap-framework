@@ -2,6 +2,7 @@
 shader_type spatial;
 render_mode unshaded;
 
+uniform sampler2D terminator_gradient;
 uniform sampler2D normal_licap : hint_default_white; // Stores normals as RGB
 uniform sampler2D licap_texture : hint_default_white, source_color, filter_linear, repeat_disable;
 uniform vec3 light_position_w;
@@ -21,27 +22,27 @@ uniform float max_derivative = 0.1;
 void fragment() {
 	vec3 Lw = normalize(light_position_w - world_pos);
 	Lw = vec3(-Lw.z, Lw.y, Lw.x);
-	
+
 	vec3 light_forward = Lw;
 	vec3 light_right = normalize(cross(vec3(0.0, 1.0, 0.0), light_forward));
 	vec3 light_up = cross(light_forward, light_right);
-	
+
 	vec3 smooth_normal = world_normal;
 	if (normal_smoothing > 0.0) {
 		vec3 dNdx = dFdx(world_normal);
 		vec3 dNdy = dFdy(world_normal);
-		
+
 		// Clamp derivative magnitude to prevent edge artifacts
-		
+
 		dNdx = clamp(dNdx, -max_derivative, max_derivative);
 		dNdy = clamp(dNdy, vec3(-max_derivative), vec3(max_derivative));
-		
+
 		smooth_normal = normalize(world_normal - (dNdx + dNdy) * normal_smoothing);
 	}
-	
+
 	float u = dot(smooth_normal, light_right);
 	float v = dot(smooth_normal, light_up);
 	vec2 uv_coords = clamp(vec2(u, v) * 0.5 + 0.5, 0.0, 1.0);
-	
+
 	ALBEDO = texture(licap_texture, uv_coords).rgb;
 }
