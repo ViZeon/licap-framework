@@ -1,0 +1,85 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 31.01.2013 02:28:55
+
+newmtl Material__186
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.000000 0.000000 0.000000
+	Kd 0.000000 0.000000 0.000000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Users\vados\Desktop\Новая папка (3)\Dante (1)\CH_dante_ingame\Textures\t_dante_hair_black_dm.tga
+	map_Kd C:\Users\vados\Desktop\Новая папка (3)\Dante (1)\CH_dante_ingame\Textures\t_dante_hair_black_dm.tga
+	map_d C:\Users\vados\Desktop\Новая папка (3)\Dante (1)\CH_dante_ingame\Textures\t_dante_hair_black_dm.tga
+
+newmtl Material__312
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Users\vados\Desktop\Новая папка (3)\Dante (1)\CH_dante_ingame\Textures\t_dante_eye_d.tga
+	map_Kd C:\Users\vados\Desktop\Новая папка (3)\Dante (1)\CH_dante_ingame\Textures\t_dante_eye_d.tga
+
+newmtl m_dante_teeth
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+
+newmtl Material__324
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Users\vados\Desktop\Новая папка (3)\Dante (1)\CH_dante_ingame\Textures\t_dante_naked_upperbody_d.tga
+	map_Kd C:\Users\vados\Desktop\Новая папка (3)\Dante (1)\CH_dante_ingame\Textures\t_dante_naked_upperbody_d.tga
+
+newmtl Material__336
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Users\vados\Desktop\Новая папка (3)\Dante (1)\CH_dante_ingame\Textures\t_dante_naked_lowerbody_d.tga
+	map_Kd C:\Users\vados\Desktop\Новая папка (3)\Dante (1)\CH_dante_ingame\Textures\t_dante_naked_lowerbody_d.tga
+
+newmtl Material__348
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Users\vados\Desktop\Новая папка (3)\Dante (1)\CH_dante_ingame\Textures\t_dante_head_d.tga
+	map_Kd C:\Users\vados\Desktop\Новая папка (3)\Dante (1)\CH_dante_ingame\Textures\t_dante_head_d.tga

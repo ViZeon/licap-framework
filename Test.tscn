@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=4 uid="uid://dcuqid155ecjx"]
+[gd_scene load_steps=13 format=4 uid="uid://dcuqid155ecjx"]
 
 [ext_resource type="Material" uid="uid://y1efon4wxvbi" path="res://Src/LiCap.tres" id="2_8tn2x"]
 [ext_resource type="Script" uid="uid://dlux4mh2cxpb3" path="res://Scripts/Systems/Lighting/scene_light_control.gd" id="3_2au82"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://yb3tmhg57mvr" path="res://Scripts/Systems/Lighting/Nodes/LiCapMesh3D.gd" id="5_ivycn"]
 [ext_resource type="ArrayMesh" uid="uid://bthr4rinwk2ke" path="res://Src/dmcdevil-may-cry-classic-dante/source/DMC,DEVIL MAY CRY DANTE/DMC,DEVIL MAY CRY DANTE .obj" id="5_q1uvj"]
 [ext_resource type="Material" uid="uid://bmvfc3ujkrjq2" path="res://Src/transparent_standard_material_3d.tres" id="6_ivycn"]
+[ext_resource type="ArrayMesh" uid="uid://dyhpnviry4p87" path="res://Src/Dante1/Dante3.obj" id="7_q1uvj"]
 
 [sub_resource type="GDScript" id="GDScript_8tn2x"]
 script/source = "@tool
@@ -273,7 +274,7 @@ collision_set = true
 metadata/_custom_type_script = "uid://yb3tmhg57mvr"
 
 [node name="LiCapLight" type="Node3D" parent="." node_paths=PackedStringArray("light_control")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.143477, 0.645418, 0.276073)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.138556, 1.80821, 0.0864716)
 script = ExtResource("5_aq4fw")
 licap_mat = ExtResource("2_8tn2x")
 light_var_name = "light_position_w"
@@ -298,3 +299,13 @@ mesh = ExtResource("5_q1uvj")
 [node name="Dmc,devilMayCryDante2" type="MeshInstance3D" parent="."]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("ArrayMesh_qs82m")
+
+[node name="Dante3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("2_8tn2x")

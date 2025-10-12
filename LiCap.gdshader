@@ -2,6 +2,8 @@
 shader_type spatial;
 render_mode unshaded;
 
+uniform sampler2D normal_map : hint_normal, filter_linear;
+uniform float normal_map_strength : hint_range(0.0, 1.0) = 1.0;
 uniform sampler2D diffuse_texture: hint_default_white, source_color, filter_linear;
 uniform sampler2D licap_texture : hint_default_white, source_color, filter_linear, repeat_disable;
 uniform vec3 light_position_w;
@@ -18,6 +20,8 @@ uniform float uv_smoothing : hint_range(0.0, 0.5) = 0.0;
 uniform float normal_smoothing : hint_range(0.0, 1.0) = 0.0;
 uniform float max_derivative = 0.1;
 
+varying vec3 tangent_w;
+varying vec3 binormal_w;
 
 // Normal
 vec3 blend_normal(vec3 base, vec3 blend, float factor) {
@@ -141,7 +145,9 @@ vec3 evaluate_color_ramp(float input_value) {
 
 void vertex() {
 	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	world_normal = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
+    world_normal = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
+    tangent_w = normalize((MODEL_MATRIX * vec4(TANGENT, 0.0)).xyz);
+    binormal_w = normalize((MODEL_MATRIX * vec4(BINORMAL, 0.0)).xyz);
 }
 
 
@@ -165,6 +171,12 @@ void fragment() {
 
 		smooth_normal = normalize(world_normal - (dNdx + dNdy) * normal_smoothing);
 	}
+
+
+	// Simple normal map blend
+vec3 normal_map_sample = texture(normal_map, UV).rgb * 2.0 - 1.0;
+smooth_normal = normalize(smooth_normal + normal_map_sample * normal_map_strength);
+
 
 	float u = dot(smooth_normal, light_right);
 	float v = dot(smooth_normal, light_up);
