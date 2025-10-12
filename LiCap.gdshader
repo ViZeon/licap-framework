@@ -150,6 +150,8 @@ void fragment() {
 	Lw = vec3(-Lw.z, Lw.y, Lw.x);
 
 	vec3 light_forward = Lw;
+	//vec3 up_vector = abs(light_forward.y) > 0.999 ? vec3(0.0, 0.0, 1.0) : vec3(0.0, 1.0, 0.0);
+	//vec3 light_right = normalize(cross(up_vector, light_forward));
 	vec3 light_right = normalize(cross(vec3(0.0, 1.0, 0.0), light_forward));
 	vec3 light_up = cross(light_forward, light_right);
 
