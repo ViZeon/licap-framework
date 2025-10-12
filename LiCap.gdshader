@@ -64,6 +64,7 @@ void fragment() {
 	float mask_value = texture(licap_texture,uv_coords).r;
 	float remapped = texture(terminator_gradient, vec2(mask_value,0.5)).r;
 
+	vec3 grad_col = sample_gradient(light_intesity).rgb;
 
-	ALBEDO = vec3(remapped);
+	ALBEDO = vec3(grad_col);
 }
