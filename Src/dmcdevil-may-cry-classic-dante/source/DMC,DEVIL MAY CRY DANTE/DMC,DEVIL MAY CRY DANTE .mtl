@@ -1,0 +1,74 @@
+# exported in Zmodeler Android (FSS)
+# 8 materials
+
+newmtl Material0
+Ns 320.000
+Ka 1.0000 1.0000 1.0000
+Kd 0.4980 0.4980 0.4980
+Ks 1.0000 1.0000 1.0000
+Ke 0.0000 0.0000 0.0000
+illum 2
+map_Kd t_dante_naked_upperbody_d
+
+newmtl Material1
+Ns 320.000
+Ka 1.0000 1.0000 1.0000
+Kd 0.4980 0.4980 0.4980
+Ks 1.0000 1.0000 1.0000
+Ke 0.0000 0.0000 0.0000
+illum 2
+map_Kd t_danteoriginal_vest_d
+
+newmtl Material2
+Ns 320.000
+Ka 1.0000 1.0000 1.0000
+Kd 0.4980 0.4980 0.4980
+Ks 1.0000 1.0000 1.0000
+Ke 0.0000 0.0000 0.0000
+illum 2
+map_Kd t_danteoriginal_upperbody_d
+
+newmtl Material3
+Ns 320.000
+Ka 1.0000 1.0000 1.0000
+Kd 0.4980 0.4980 0.4980
+Ks 1.0000 1.0000 1.0000
+Ke 0.0000 0.0000 0.0000
+illum 2
+map_Kd t_danteoriginal_hair_d
+
+newmtl Material4
+Ns 320.000
+Ka 1.0000 1.0000 1.0000
+Kd 0.4980 0.4980 0.4980
+Ks 1.0000 1.0000 1.0000
+Ke 0.0000 0.0000 0.0000
+illum 2
+map_Kd t_danteninja_head_d
+
+newmtl Material5
+Ns 320.000
+Ka 1.0000 1.0000 1.0000
+Kd 0.4980 0.4980 0.4980
+Ks 1.0000 1.0000 1.0000
+Ke 0.0000 0.0000 0.0000
+illum 2
+map_Kd t_dante_caruncles_d
+
+newmtl Material6
+Ns 320.000
+Ka 1.0000 1.0000 1.0000
+Kd 0.4980 0.4980 0.4980
+Ks 1.0000 1.0000 1.0000
+Ke 0.0000 0.0000 0.0000
+illum 2
+map_Kd t_dante_eye_d
+
+newmtl Material7
+Ns 320.000
+Ka 1.0000 1.0000 1.0000
+Kd 0.4980 0.4980 0.4980
+Ks 1.0000 1.0000 1.0000
+Ke 0.0000 0.0000 0.0000
+illum 2
+map_Kd t_danteoriginal_lowerbody_d

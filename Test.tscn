@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://dcuqid155ecjx"]
+[gd_scene load_steps=9 format=3 uid="uid://dcuqid155ecjx"]
 
 [ext_resource type="Material" uid="uid://y1efon4wxvbi" path="res://Src/LiCap.tres" id="2_8tn2x"]
 [ext_resource type="Script" uid="uid://dlux4mh2cxpb3" path="res://Scripts/Systems/Lighting/scene_light_control.gd" id="3_2au82"]
 [ext_resource type="Script" uid="uid://wnpprgsc35gp" path="res://Scripts/Systems/Lighting/Nodes/LiCapLight.gd" id="5_aq4fw"]
 [ext_resource type="Script" uid="uid://yb3tmhg57mvr" path="res://Scripts/Systems/Lighting/Nodes/LiCapMesh3D.gd" id="5_ivycn"]
+[ext_resource type="ArrayMesh" uid="uid://bthr4rinwk2ke" path="res://Src/dmcdevil-may-cry-classic-dante/source/DMC,DEVIL MAY CRY DANTE/DMC,DEVIL MAY CRY DANTE .obj" id="5_q1uvj"]
 
 [sub_resource type="GDScript" id="GDScript_8tn2x"]
 script/source = "@tool
@@ -46,6 +47,7 @@ radius = 1.083
 
 [node name="CSGTorus3D" type="CSGTorus3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.758466, 0)
+visible = false
 sides = 12
 ring_sides = 12
 
@@ -63,6 +65,7 @@ script = ExtResource("3_2au82")
 scene_lights = [NodePath("../LiCapLight")]
 
 [node name="LiCapObject" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("TorusMesh_8tn2x")
 skeleton = NodePath("")
 script = ExtResource("5_ivycn")
@@ -70,7 +73,7 @@ collision_set = true
 metadata/_custom_type_script = "uid://yb3tmhg57mvr"
 
 [node name="LiCapLight" type="Node3D" parent="." node_paths=PackedStringArray("light_control")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.38419e-07, 0.475345, -3.1982)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.102188, 0.673894, 0.121365)
 script = ExtResource("5_aq4fw")
 licap_mat = ExtResource("2_8tn2x")
 light_var_name = "light_position_w"
@@ -85,3 +88,8 @@ metadata/_custom_type_script = "uid://wnpprgsc35gp"
 [node name="OmniLight3D2" type="OmniLight3D" parent="LiCapLight"]
 light_energy = 0.778
 light_indirect_energy = 16.0
+
+[node name="Dmc,devilMayCryDante" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+material_override = ExtResource("2_8tn2x")
+mesh = ExtResource("5_q1uvj")
