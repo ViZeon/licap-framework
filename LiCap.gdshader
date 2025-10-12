@@ -146,17 +146,12 @@ void vertex() {
 
 
 void fragment() {
-	//vec3 Lw = normalize(light_position_w - world_pos);
-	//Lw = vec3(-Lw.z, Lw.y, Lw.x);
-
 	vec3 Lw = normalize(light_position_w - world_pos);
+	Lw = vec3(-Lw.z, Lw.y, Lw.x);
 
-	vec3 light_forward = vec3(-Lw.z, -Lw.y, -Lw.x);
-	vec3 light_up = normalize(cross(vec3(0.0, 1.0, 0.0), light_forward));
-	vec3 light_right = cross(light_up, light_forward);
-	//vec3 light_forward = Lw;
-	//vec3 light_right = normalize(cross(vec3(0.0, 1.0, 0.0), light_forward));
-	//vec3 light_up = cross(light_forward, light_right);
+	vec3 light_forward = Lw;
+	vec3 light_right = normalize(cross(vec3(0.0, 1.0, 0.0), light_forward));
+	vec3 light_up = cross(light_forward, light_right);
 
 	vec3 smooth_normal = world_normal;
 	if (normal_smoothing > 0.0) {
