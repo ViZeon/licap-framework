@@ -1,15 +1,21 @@
-[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://y1efon4wxvbi"]
+[gd_resource type="ShaderMaterial" load_steps=5 format=4 uid="uid://y1efon4wxvbi"]
 
 [ext_resource type="Shader" uid="uid://b06ligm51i2nd" path="res://LiCap.gdshader" id="1_cncbx"]
 [ext_resource type="Texture2D" uid="uid://8y08p07f8m56" path="res://Src/Prototype_LiCap.jpg" id="2_42u3b"]
 [ext_resource type="Texture2D" uid="uid://bmvyndali2qwp" path="res://Src/NormalCap.jpg" id="3_42u3b"]
+[ext_resource type="Texture2D" uid="uid://bilmd31w6sd40" path="res://Src/new_gradient_texture_1d.tres" id="4_rg4x5"]
 
 [resource]
 render_priority = 0
 shader = ExtResource("1_cncbx")
+shader_parameter/point_count = 0
+shader_parameter/offsets = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/colors = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/light_intesity = 0.0
+shader_parameter/terminator_gradient = ExtResource("4_rg4x5")
 shader_parameter/normal_licap = ExtResource("3_42u3b")
 shader_parameter/licap_texture = ExtResource("2_42u3b")
-shader_parameter/light_position_w = Vector3(0.0665509, 0.753171, 1.67636)
+shader_parameter/light_position_w = Vector3(0.599441, -0.533341, 1.11321)
 shader_parameter/uv_smoothing = 0.0
 shader_parameter/normal_smoothing = 0.0
 shader_parameter/max_derivative = 2.995
