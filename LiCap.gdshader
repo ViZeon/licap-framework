@@ -2,12 +2,6 @@
 shader_type spatial;
 render_mode unshaded;
 
-uniform int point_count;
-uniform float offsets[16];
-uniform vec4 colors[16];
-
-uniform float light_intesity;
-
 uniform sampler2D terminator_gradient:  source_color, filter_linear, repeat_disable;
 uniform sampler2D normal_licap : hint_default_white; // Stores normals as RGB
 uniform sampler2D licap_texture : hint_default_white, source_color, filter_linear, repeat_disable;
@@ -16,14 +10,31 @@ uniform vec3 light_position_w;
 varying vec3 world_pos;
 varying vec3 world_normal;
 
-vec4 sample_gradient(float t) {
-    vec4 col = colors[point_count-1];
-    for (int i = 0; i < point_count - 1; i++) {
-        float w = clamp((t - offsets[i]) / (offsets[i+1] - offsets[i]), 0.0, 1.0);
-        col = mix(col, mix(colors[i], colors[i+1], w), step(offsets[i], t) * (1.0 - step(offsets[i+1], t)));
+// Uniforms for gradient control points
+uniform int num_gradient_points = 2;
+uniform vec4 gradient_stops[16]: source_color;  // RGB = color, A = position
+
+vec3 evaluate_color_ramp(float input_value) {
+    input_value = clamp(input_value, 0.0, 1.0);
+
+    // Find surrounding stops
+    int left_idx = 0;
+    for (int i = 0; i < num_gradient_points - 1; i++) {
+        if (input_value >= gradient_stops[i].a) {
+            left_idx = i;
+        }
     }
-    return col;
+
+    int right_idx = min(left_idx + 1, num_gradient_points - 1);
+
+    // Interpolate
+    float left_pos = gradient_stops[left_idx].a;
+    float right_pos = gradient_stops[right_idx].a;
+    float blend = (input_value - left_pos) / (right_pos - left_pos + 0.0001);
+
+    return mix(gradient_stops[left_idx].rgb, gradient_stops[right_idx].rgb, blend);
 }
+
 void vertex() {
 	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	world_normal = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
@@ -61,10 +72,9 @@ void fragment() {
 	float v = dot(smooth_normal, light_up);
 	vec2 uv_coords = clamp(vec2(u, v) * 0.5 + 0.5, 0.0, 1.0);
 
-	float mask_value = texture(licap_texture,uv_coords).r;
-	float remapped = texture(terminator_gradient, vec2(mask_value,0.5)).r;
+	float mask_value = texture(licap_texture, uv_coords).r;
+	vec3 final_color = evaluate_color_ramp(mask_value);
+	ALBEDO = final_color;
 
-	vec3 grad_col = sample_gradient(light_intesity).rgb;
-
-	ALBEDO = vec3(grad_col);
+	//ALBEDO = vec3(remapped);
 }

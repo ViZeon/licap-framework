@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=5 format=4 uid="uid://y1efon4wxvbi"]
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://y1efon4wxvbi"]
 
 [ext_resource type="Shader" uid="uid://b06ligm51i2nd" path="res://LiCap.gdshader" id="1_cncbx"]
 [ext_resource type="Texture2D" uid="uid://8y08p07f8m56" path="res://Src/Prototype_LiCap.jpg" id="2_42u3b"]
@@ -8,14 +8,12 @@
 [resource]
 render_priority = 0
 shader = ExtResource("1_cncbx")
-shader_parameter/point_count = 0
-shader_parameter/offsets = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/colors = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/light_intesity = 100.0
 shader_parameter/terminator_gradient = ExtResource("4_rg4x5")
 shader_parameter/normal_licap = ExtResource("3_42u3b")
 shader_parameter/licap_texture = ExtResource("2_42u3b")
-shader_parameter/light_position_w = Vector3(0.599441, -0.125033, 1.83643)
+shader_parameter/light_position_w = Vector3(-2.38419e-07, 0.475345, -3.1982)
+shader_parameter/num_gradient_points = 3
+shader_parameter/gradient_stops = PackedColorArray(0, 0, 0, 0, 0.39, 0.39, 0.39, 0.113725, 0.61, 0.61, 0.61, 0.831373)
 shader_parameter/uv_smoothing = 0.0
 shader_parameter/normal_smoothing = 0.0
 shader_parameter/max_derivative = 2.995
