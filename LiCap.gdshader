@@ -2,7 +2,7 @@
 shader_type spatial;
 render_mode unshaded;
 
-uniform sampler2D diffuse_texture;
+uniform sampler2D diffuse_texture: hint_default_white, source_color, filter_linear;
 uniform sampler2D licap_texture : hint_default_white, source_color, filter_linear, repeat_disable;
 uniform vec3 light_position_w;
 
@@ -12,6 +12,111 @@ varying vec3 world_normal;
 // Uniforms for gradient control points
 uniform int num_gradient_points = 2;
 uniform vec4 gradient_stops[16]: source_color;  // RGB = color, A = position
+
+uniform float uv_smoothing : hint_range(0.0, 0.5) = 0.0;
+
+uniform float normal_smoothing : hint_range(0.0, 1.0) = 0.0;
+uniform float max_derivative = 0.1;
+
+
+// Normal
+vec3 blend_normal(vec3 base, vec3 blend, float factor) {
+    return mix(base, blend, factor);
+}
+
+// Multiply
+vec3 blend_multiply(vec3 base, vec3 blend, float factor) {
+    return mix(base, base * blend, factor);
+}
+
+// Screen
+vec3 blend_screen(vec3 base, vec3 blend, float factor) {
+    return mix(base, 1.0 - (1.0 - base) * (1.0 - blend), factor);
+}
+
+// Overlay
+vec3 blend_overlay(vec3 base, vec3 blend, float factor) {
+    vec3 result = mix(
+        2.0 * base * blend,
+        1.0 - 2.0 * (1.0 - base) * (1.0 - blend),
+        step(0.5, base)
+    );
+    return mix(base, result, factor);
+}
+
+// Soft Light
+vec3 blend_soft_light(vec3 base, vec3 blend, float factor) {
+    vec3 result = mix(
+        2.0 * base * blend + base * base * (1.0 - 2.0 * blend),
+        sqrt(base) * (2.0 * blend - 1.0) + 2.0 * base * (1.0 - blend),
+        step(0.5, blend)
+    );
+    return mix(base, result, factor);
+}
+
+// Hard Light
+vec3 blend_hard_light(vec3 base, vec3 blend, float factor) {
+    vec3 result = mix(
+        2.0 * base * blend,
+        1.0 - 2.0 * (1.0 - base) * (1.0 - blend),
+        step(0.5, blend)
+    );
+    return mix(base, result, factor);
+}
+
+// Darken
+vec3 blend_darken(vec3 base, vec3 blend, float factor) {
+    return mix(base, min(base, blend), factor);
+}
+
+// Lighten
+vec3 blend_lighten(vec3 base, vec3 blend, float factor) {
+    return mix(base, max(base, blend), factor);
+}
+
+// Color Dodge
+vec3 blend_color_dodge(vec3 base, vec3 blend, float factor) {
+    vec3 result = base / (1.0 - blend + 0.0001);
+    return mix(base, clamp(result, 0.0, 1.0), factor);
+}
+
+// Color Burn
+vec3 blend_color_burn(vec3 base, vec3 blend, float factor) {
+    vec3 result = 1.0 - (1.0 - base) / (blend + 0.0001);
+    return mix(base, clamp(result, 0.0, 1.0), factor);
+}
+
+// Linear Dodge (Add)
+vec3 blend_linear_dodge(vec3 base, vec3 blend, float factor) {
+    return mix(base, clamp(base + blend, 0.0, 1.0), factor);
+}
+
+// Linear Burn
+vec3 blend_linear_burn(vec3 base, vec3 blend, float factor) {
+    return mix(base, clamp(base + blend - 1.0, 0.0, 1.0), factor);
+}
+
+// Difference
+vec3 blend_difference(vec3 base, vec3 blend, float factor) {
+    return mix(base, abs(base - blend), factor);
+}
+
+// Exclusion
+vec3 blend_exclusion(vec3 base, vec3 blend, float factor) {
+    return mix(base, base + blend - 2.0 * base * blend, factor);
+}
+
+// Subtract
+vec3 blend_subtract(vec3 base, vec3 blend, float factor) {
+    return mix(base, clamp(base - blend, 0.0, 1.0), factor);
+}
+
+// Divide
+vec3 blend_divide(vec3 base, vec3 blend, float factor) {
+    vec3 result = base / (blend + 0.0001);
+    return mix(base, clamp(result, 0.0, 1.0), factor);
+}
+
 
 vec3 evaluate_color_ramp(float input_value) {
     input_value = clamp(input_value, 0.0, 1.0);
@@ -34,79 +139,11 @@ vec3 evaluate_color_ramp(float input_value) {
     return mix(gradient_stops[left_idx].rgb, gradient_stops[right_idx].rgb, blend);
 }
 
-vec3 overlay(vec3 base, vec3 blend)
-{
-	return mix(2.0 * base * blend, 1.0 - 2.0 * (1.0 - base) * (1.0 - blend), step(0.5,base));
-}
-
-// --- Add these two complex helper functions above fragment() ---
-
-// Converts RGB to HSL. Outputs: H in [0,1], S in [0,1], L in [0,1]
-vec3 rgb_to_hsl(vec3 color) {
-    float max_c = max(color.r, max(color.g, color.b));
-    float min_c = min(color.r, min(color.g, color.b));
-    float h = 0.0, s = 0.0, l = (max_c + min_c) / 2.0;
-    if (max_c == min_c) {
-        h = s = 0.0; // achromatic
-    } else {
-        float d = max_c - min_c;
-        s = l > 0.5 ? d / (2.0 - max_c - min_c) : d / (max_c + min_c);
-        if (max_c == color.r) h = (color.g - color.b) / d + (color.g < color.b ? 6.0 : 0.0);
-        else if (max_c == color.g) h = (color.b - color.r) / d + 2.0;
-        else if (max_c == color.b) h = (color.r - color.g) / d + 4.0;
-        h /= 6.0;
-    }
-    return vec3(h, s, l);
-}
-
-// Converts HSL to RGB
-// Helper function for hsl_to_rgb. Must be defined before it's called.
-float hue_to_rgb_channel(float p, float q, float t) {
-    if (t < 0.0) t += 1.0;
-    if (t > 1.0) t -= 1.0;
-    if (t < 1.0/6.0) return p + (q - p) * 6.0 * t;
-    if (t < 1.0/2.0) return q;
-    if (t < 2.0/3.0) return p + (q - p) * (2.0/3.0 - t) * 6.0;
-    return p;
-}
-
-// Converts HSL to RGB.
-vec3 hsl_to_rgb(vec3 hsl) {
-    vec3 rgb;
-    if (hsl.y == 0.0) {
-        rgb = vec3(hsl.z); // Achromatic (grayscale)
-    } else {
-        float q = hsl.z < 0.5 ? hsl.z * (1.0 + hsl.y) : hsl.z + hsl.y - hsl.z * hsl.y;
-        float p = 2.0 * hsl.z - q;
-        rgb.r = hue_to_rgb_channel(p, q, hsl.x + 1.0/3.0);
-        rgb.g = hue_to_rgb_channel(p, q, hsl.x);
-        rgb.b = hue_to_rgb_channel(p, q, hsl.x - 1.0/3.0);
-    }
-    return rgb;
-}
-
-
-vec3 color_blend ( vec3 base_color, vec3 blend_color) {
-// --- In fragment() ---
-vec3 base_hsl = rgb_to_hsl(base_color.rgb);
-vec3 blend_hsl = rgb_to_hsl(blend_color.rgb);
-
-// Take Hue and Saturation from blend, and Luminance from base
-vec3 final_hsl = vec3(blend_hsl.x, blend_hsl.y, base_hsl.z);
-
-return( hsl_to_rgb(final_hsl));
-}
-
-
 void vertex() {
 	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	world_normal = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
 }
 
-uniform float uv_smoothing : hint_range(0.0, 0.5) = 0.0;
-
-uniform float normal_smoothing : hint_range(0.0, 1.0) = 0.0;
-uniform float max_derivative = 0.1;
 
 void fragment() {
 	vec3 Lw = normalize(light_position_w - world_pos);
@@ -136,7 +173,7 @@ void fragment() {
 	vec4 color = texture(diffuse_texture,UV);
 
 	float mask_value = texture(licap_texture, uv_coords).r;
-	vec3 final_color = color_blend( color.rgb, evaluate_color_ramp(mask_value));
+	vec3 final_color = blend_overlay( color.rgb,evaluate_color_ramp(mask_value), 1);
 	ALBEDO = final_color;
 
 	//ALBEDO = vec3(remapped);
