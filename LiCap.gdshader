@@ -41,16 +41,16 @@ vec3 rgb2hsl(vec3 c) {
     float maxC = max(max(c.r, c.g), c.b);
     float minC = min(min(c.r, c.g), c.b);
     float delta = maxC - minC;
-    
+
     // Luminance
     float l = (maxC + minC) / 2.0;
-    
+
     // Saturation
     float s = 0.0;
     if (delta > 0.0001) {
         s = l < 0.5 ? delta / (maxC + minC) : delta / (2.0 - maxC - minC);
     }
-    
+
     // Hue
     float h = 0.0;
     if (delta > 0.0001) {
@@ -63,7 +63,7 @@ vec3 rgb2hsl(vec3 c) {
         }
         h /= 6.0;
     }
-    
+
     return vec3(h, s, l);
 }
 
@@ -72,19 +72,19 @@ vec3 hsl2rgb(vec3 c) {
     float h = c.x;
     float s = c.y;
     float l = c.z;
-    
+
     float q = l < 0.5 ? l * (1.0 + s) : l + s - l * s;
     float p = 2.0 * l - q;
-    
+
     vec3 rgb;
     rgb.r = h + 1.0/3.0;
     rgb.g = h;
     rgb.b = h - 1.0/3.0;
-    
+
     for(int i = 0; i < 3; i++) {
         if(rgb[i] < 0.0) rgb[i] += 1.0;
         if(rgb[i] > 1.0) rgb[i] -= 1.0;
-        
+
         if(rgb[i] < 1.0/6.0)
             rgb[i] = p + (q - p) * 6.0 * rgb[i];
         else if(rgb[i] < 0.5)
@@ -94,7 +94,7 @@ vec3 hsl2rgb(vec3 c) {
         else
             rgb[i] = p;
     }
-    
+
     return rgb;
 }
 
@@ -212,18 +212,18 @@ vec3 blend_divide(vec3 base, vec3 blend, float factor) {
 // Cardinal spline interpolation
 vec3 cardinal_spline(vec3 p0, vec3 p1, vec3 p2, vec3 p3, float t) {
     float tension = 0.5;
-    
+
     vec3 m1 = (1.0 - tension) * (p2 - p0);
     vec3 m2 = (1.0 - tension) * (p3 - p1);
-    
+
     float t2 = t * t;
     float t3 = t2 * t;
-    
+
     float h00 = 2.0 * t3 - 3.0 * t2 + 1.0;
     float h10 = t3 - 2.0 * t2 + t;
     float h01 = -2.0 * t3 + 3.0 * t2;
     float h11 = t3 - t2;
-    
+
     return h00 * p1 + h10 * m1 + h01 * p2 + h11 * m2;
 }
 
@@ -246,12 +246,12 @@ vec3 evaluate_color_ramp(float input_value) {
     if (easing_type == 1) {
         int p0_idx = max(left_idx - 1, 0);
         int p3_idx = min(right_idx + 1, num_gradient_points - 1);
-        
+
         vec3 p0 = gradient_stops[p0_idx].rgb;
         vec3 p1 = gradient_stops[left_idx].rgb;
         vec3 p2 = gradient_stops[right_idx].rgb;
         vec3 p3 = gradient_stops[p3_idx].rgb;
-        
+
         return cardinal_spline(p0, p1, p2, p3, blend);
     } else {
         return mix(gradient_stops[left_idx].rgb, gradient_stops[right_idx].rgb, blend);
@@ -307,37 +307,38 @@ void fragment() {
 	vec3 mask_col = texture(licap_texture, uv_coords).rgb;
 
 	vec3 color_filter_02 = blend_soft_light( evaluate_color_ramp(mask_value),color.rgb, 1);
-	
+
 	vec3 shadow_albedo = blend_multiply(color.rgb, color.rgb, 1);
 	vec3 final_color = blend_multiply(shadow_albedo,color.rgb, mask_value);
-	
+
 	vec3 shadow_ramp = evaluate_color_ramp(mask_value);
 	vec3 shadow_hsl = rgb2hsl(shadow_ramp);
 	vec3 color_hsl = rgb2hsl(color.rgb);
-	
+
 	float color_h = color_hsl.r;
 	float color_s = clamp(saturation_curve(color_hsl.g)*satu_gradient.r*3.0, 0.0, 1.0);
 	float satu_luminance = color_s;
-	
-	
+
+
 
 
 	float color_l = shadow_hsl.b * color_hsl.b / satu_luminance * 1.5;
-	
+
 		float shadow_amount = (1.0 - mask_value);
 	float sss_factor = clamp((shadow_amount) * sss_strength + (1.0-color_l) ,0.0, 1.0);
 
 	// Apply to luminance channel
 	float sss_luminance = blend_color_dodge_f(color_hsl.b, 0.8, sss_factor);
 	 //color_l = sss_luminance;
-	
+
 	vec3 mixed_hsl = vec3(color_h, color_s, color_l);
-	
+
 	mixed_hsl.r *= satu_luminance * 1.3 + (1.0 - satu_luminance)*sss_luminance;
-	
+
 	vec3 combined_rgb = hsl2rgb(mixed_hsl);
 
-	float albedo_float = sss_luminance;
+	float albedo_float =mask_value;
 	ALBEDO = combined_rgb;
-	//ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
+	ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
+	ALBEDO = evaluate_color_ramp(mask_value);
 }

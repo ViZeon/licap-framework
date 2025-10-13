@@ -1,0 +1,45 @@
+# Blender 4.5.3 LTS MTL File: 'None'
+# www.blender.org
+
+newmtl BlackCoat
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/BlackCoat_baseColor.png
+map_Bump -bm 1.000000 C:/BlackCoat_normal.png
+
+newmtl BlackGlass
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/BlackGlass_baseColor.png
+map_Ke C:/BlackGlass_emissive.png
+
+newmtl BlackShadow
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/BlackShadow_baseColor.png
+map_Bump -bm 1.000000 C:/BlackShadow_normal.png
+
+newmtl GreyCoat
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/GreyCoat_baseColor.png
+map_Bump -bm 1.000000 C:/GreyCoat_normal.png

@@ -1,0 +1,30 @@
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://b3mnvcps1n131"]
+
+[ext_resource type="Shader" uid="uid://b06ligm51i2nd" path="res://LiCap.gdshader" id="1_mi4b5"]
+[ext_resource type="Texture2D" uid="uid://c2fhm1rpx82j7" path="res://Src/Testing/sniper_rifle/textures/White_baseColor.jpeg" id="2_mi4b5"]
+[ext_resource type="Texture2D" uid="uid://8y08p07f8m56" path="res://Src/Prototype_LiCap.jpg" id="3_7sfyu"]
+[ext_resource type="Texture2D" uid="uid://epk030eqntil" path="res://Src/Testing/sniper_rifle/textures/White_normal.png" id="4_vypx5"]
+[ext_resource type="Texture2D" uid="uid://c0pmgc26f56vw" path="res://Src/Testing/Materials/Sniper_gradient_texture_1d.tres" id="5_7sfyu"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_mi4b5")
+shader_parameter/normal_map = ExtResource("4_vypx5")
+shader_parameter/normal_map_strength = 0.604
+shader_parameter/diffuse_texture = ExtResource("2_mi4b5")
+shader_parameter/licap_texture = ExtResource("3_7sfyu")
+shader_parameter/light_position_w = Vector3(-0.322028, 0.217796, -0.0544548)
+shader_parameter/num_gradient_points = 3
+shader_parameter/gradient_stops = PackedColorArray(0, 0, 0, 0, 0.57, 0.57, 0.57, 0.32549, 1, 1, 1, 1)
+shader_parameter/saturation_gradient = ExtResource("5_7sfyu")
+shader_parameter/uv_smoothing = 0.0
+shader_parameter/normal_smoothing = 1.0
+shader_parameter/max_derivative = 0.1
+shader_parameter/sss_strength = 0.0
+shader_parameter/shadow_tint = Vector3(0.6, 0.7, 1)
+shader_parameter/highlight_tint = Vector3(1, 0.95, 0.85)
+shader_parameter/shadow_hue_shift = -0.05
+shader_parameter/highlight_hue_shift = 0.03
+shader_parameter/saturation_boost = -0.015
+shader_parameter/dark_saturation_boost = 1.0
+shader_parameter/easing_type = 1

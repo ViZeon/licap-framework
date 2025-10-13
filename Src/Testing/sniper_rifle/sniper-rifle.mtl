@@ -1,0 +1,46 @@
+# Blender 4.5.3 LTS MTL File: 'None'
+# www.blender.org
+
+newmtl Black
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/Black_baseColor.jpeg
+map_Bump -bm 1.000000 C:/Black_normal.png
+
+newmtl Emission
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/Emission_baseColor.jpeg
+map_Ke C:/Emission_emissive.jpeg
+map_Bump -bm 1.000000 C:/Emission_normal.png
+
+newmtl Grey
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/Grey_baseColor.jpeg
+map_Bump -bm 1.000000 C:/Grey_normal.png
+
+newmtl White
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/White_baseColor.jpeg
+map_Bump -bm 1.000000 C:/White_normal.png

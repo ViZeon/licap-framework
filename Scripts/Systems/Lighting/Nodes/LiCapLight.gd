@@ -2,7 +2,7 @@
 extends Node3D
 class_name LiCapLight
 
-@export var licap_mat: Material
+@export var licap_mat: Array [Material]
 @export var light_var_name: String
 
 @export var light_control_initialized = false
@@ -31,18 +31,22 @@ func _ready() -> void:
 	setup()
 
 func _process(delta: float) -> void:
-	setup()
+	#setup()
 	update_light_capture()
+
+
+func tmp_process():
 	bodies = detection_area.get_overlapping_bodies()
 	for body in bodies:
 		print("Overlapping: ", body.name)
 		for child in body.get_children():
 			if child is LiCapMesh3D:
 				child.add_light(self)
-
+			
 func update_light_capture():
 	current_pos = self.global_transform.origin
-	licap_mat.set_shader_parameter(light_var_name, current_pos)
+	for material in licap_mat:
+		material.set_shader_parameter(light_var_name, current_pos)
 
 func  setup():	
 	if not detection_area_initialized:

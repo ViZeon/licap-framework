@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dxjp8fe6ofwr1"
-path="res://.godot/imported/scene.gltf-6fa17726d7a916757cc3d973f5d8d099.scn"
+uid="uid://b2lhnw6i6ujlg"
+path="res://.godot/imported/sniper_rifle.fbx-399c07fd7f2cdde91a664a2bff0c197e.scn"
 
 [deps]
 
-source_file="res://Src/Testing/r7-x_sniper/scene.gltf"
-dest_files=["res://.godot/imported/scene.gltf-6fa17726d7a916757cc3d973f5d8d099.scn"]
+source_file="res://Src/Testing/sniper_rifle/sniper_rifle.fbx"
+dest_files=["res://.godot/imported/sniper_rifle.fbx-399c07fd7f2cdde91a664a2bff0c197e.scn"]
 
 [params]
 
@@ -28,10 +28,11 @@ meshes/force_disable_compression=false
 skins/use_named_skins=true
 animation/import=true
 animation/fps=30
-animation/trimming=false
+animation/trimming=true
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={}
-gltf/naming_version=1
-gltf/embedded_image_handling=1
+fbx/importer=0
+fbx/allow_geometry_helper_nodes=false
+fbx/embedded_image_handling=1

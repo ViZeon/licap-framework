@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://dd6usbfe6w07n"]
+
+[ext_resource type="Texture2D" uid="uid://c2fhm1rpx82j7" path="res://Src/Testing/sniper_rifle/textures/White_baseColor.jpeg" id="1_mjc1f"]
+[ext_resource type="Texture2D" uid="uid://ckwo6fwe73ram" path="res://Src/Testing/sniper_rifle/textures/Grey_normal.png" id="2_k55mh"]
+
+[resource]
+specular_mode = 2
+disable_ambient_light = true
+disable_fog = true
+albedo_texture = ExtResource("1_mjc1f")
+albedo_texture_force_srgb = true
+normal_enabled = true
+normal_texture = ExtResource("2_k55mh")
+backlight_enabled = true
+backlight = Color(0.544974, 0.544974, 0.544974, 1)

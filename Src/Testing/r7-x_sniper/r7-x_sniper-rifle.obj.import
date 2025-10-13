@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cxb28fp7qc2qe"
+path="res://.godot/imported/r7-x_sniper-rifle.obj-e5ab314402008291d168dfa1abc10bcd.mesh"
+
+[deps]
+
+files=["res://.godot/imported/r7-x_sniper-rifle.obj-e5ab314402008291d168dfa1abc10bcd.mesh"]
+
+source_file="res://Src/Testing/r7-x_sniper/r7-x_sniper-rifle.obj"
+dest_files=["res://.godot/imported/r7-x_sniper-rifle.obj-e5ab314402008291d168dfa1abc10bcd.mesh", "res://.godot/imported/r7-x_sniper-rifle.obj-e5ab314402008291d168dfa1abc10bcd.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false
