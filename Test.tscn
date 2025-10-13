@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4 uid="uid://dcuqid155ecjx"]
+[gd_scene load_steps=14 format=4 uid="uid://dcuqid155ecjx"]
 
 [ext_resource type="Material" uid="uid://y1efon4wxvbi" path="res://Src/LiCap.tres" id="2_8tn2x"]
 [ext_resource type="Script" uid="uid://dlux4mh2cxpb3" path="res://Scripts/Systems/Lighting/scene_light_control.gd" id="3_2au82"]
@@ -7,6 +7,7 @@
 [ext_resource type="ArrayMesh" uid="uid://bthr4rinwk2ke" path="res://Src/dmcdevil-may-cry-classic-dante/source/DMC,DEVIL MAY CRY DANTE/DMC,DEVIL MAY CRY DANTE .obj" id="5_q1uvj"]
 [ext_resource type="Material" uid="uid://bmvfc3ujkrjq2" path="res://Src/transparent_standard_material_3d.tres" id="6_ivycn"]
 [ext_resource type="ArrayMesh" uid="uid://dyhpnviry4p87" path="res://Src/Dante1/Dante3.obj" id="7_q1uvj"]
+[ext_resource type="Material" uid="uid://bby8gu6ulspf1" path="res://Src/comparison_standard_material_3d.tres" id="8_qs82m"]
 
 [sub_resource type="GDScript" id="GDScript_8tn2x"]
 script/source = "@tool
@@ -274,7 +275,7 @@ collision_set = true
 metadata/_custom_type_script = "uid://yb3tmhg57mvr"
 
 [node name="LiCapLight" type="Node3D" parent="." node_paths=PackedStringArray("light_control")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.216298, 1.88884, -0.117702)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.153081, 1.94483, -0.125169)
 script = ExtResource("5_aq4fw")
 licap_mat = ExtResource("2_8tn2x")
 light_var_name = "light_position_w"
@@ -310,3 +311,28 @@ surface_material_override/2 = ExtResource("6_ivycn")
 surface_material_override/3 = ExtResource("6_ivycn")
 surface_material_override/4 = ExtResource("6_ivycn")
 surface_material_override/5 = ExtResource("2_8tn2x")
+
+[node name="comparison" type="Node" parent="."]
+
+[node name="Custom" type="Node" parent="comparison"]
+
+[node name="Text_CustomLighting" type="Label3D" parent="comparison/Custom"]
+transform = Transform3D(-8.52805e-09, 0, -1, 0, 0.195099, 0, 0.195099, 0, -4.37114e-08, 0, 2.05916, 0.0146884)
+text = "Custom Lighting"
+
+[node name="Default" type="Node" parent="comparison"]
+
+[node name="Text_DefaultLighting" type="Label3D" parent="comparison/Default"]
+transform = Transform3D(-8.52805e-09, 0, -1, 0, 0.195099, 0, 0.195099, 0, -4.37114e-08, 0, 2.05916, -0.253479)
+text = "Default Lighting"
+
+[node name="Dante4" type="MeshInstance3D" parent="comparison/Default"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
