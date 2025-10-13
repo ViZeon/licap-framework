@@ -322,10 +322,10 @@ void fragment() {
 	
 
 
-	float color_l = shadow_hsl.b * color_hsl.b / satu_luminance * 3.0;
+	float color_l = shadow_hsl.b * color_hsl.b / satu_luminance * 1.5;
 	
-		float shadow_amount = -mask_value;
-	float sss_factor = clamp((shadow_amount) * sss_strength * -(1.0-color_l),0.0, 1.0);
+		float shadow_amount = (1.0 - mask_value);
+	float sss_factor = clamp((shadow_amount) * sss_strength + (1.0-color_l) ,0.0, 1.0);
 
 	// Apply to luminance channel
 	float sss_luminance = blend_color_dodge_f(color_hsl.b, 0.8, sss_factor);
@@ -333,11 +333,11 @@ void fragment() {
 	
 	vec3 mixed_hsl = vec3(color_h, color_s, color_l);
 	
-	mixed_hsl.r *= satu_luminance * 1.5 + (1.0 - satu_luminance);
+	mixed_hsl.r *= satu_luminance * 1.5 + (1.0 - satu_luminance)*sss_luminance;
 	
 	vec3 combined_rgb = hsl2rgb(mixed_hsl);
 
 	float albedo_float = sss_luminance;
 	ALBEDO = combined_rgb;
-	ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
+	//ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
 }
