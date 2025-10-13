@@ -267,13 +267,17 @@ smooth_normal = normalize(mix(smooth_normal, normal_from_map, normal_map_strengt
 	vec3 shadow_albedo = blend_multiply(color.rgb, color.rgb, 1);
 	vec3 final_color = blend_multiply(shadow_albedo,color.rgb, mask_value);
 
-	vec3 shadow_hsv = rgb2hsv(mask_col);
+	vec3 shadow_hsv = rgb2hsv(evaluate_color_ramp(mask_value));
 	vec3 color_hsv = rgb2hsv(color.rgb);
-
-	vec3 mixed_hsv = vec3 (color_hsv.r, color_hsv.g,shadow_hsv.b* color_hsv.b);
+	
+	float color_h = color_hsv.r;
+	float color_s =color_hsv.g;
+	float color_v = shadow_hsv.b* color_hsv.b;
+	
+	vec3 mixed_hsv = vec3 (color_h, color_s, color_v);
 
 	vec3 combined_rgb = hsv2rgb(mixed_hsv);
 
-	    ALBEDO = evaluate_color_ramp(mask_value);
+	    ALBEDO = combined_rgb;
 	}
 		//ALBEDO = vec3(remapped);

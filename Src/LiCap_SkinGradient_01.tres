@@ -1,0 +1,27 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://cejbfrmbhsyx"]
+
+[ext_resource type="Shader" uid="uid://b06ligm51i2nd" path="res://LiCap.gdshader" id="1_yem1q"]
+[ext_resource type="Texture2D" uid="uid://dm588ru6r2e7d" path="res://Src/Dante1/t_dante_head_d.tga" id="2_wg3is"]
+[ext_resource type="Texture2D" uid="uid://8y08p07f8m56" path="res://Src/Prototype_LiCap.jpg" id="3_scu71"]
+[ext_resource type="Texture2D" uid="uid://dtcxy5jbbgy77" path="res://Src/Dante1/t_dante_head_n.tga" id="4_15hyk"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_yem1q")
+shader_parameter/normal_map = ExtResource("4_15hyk")
+shader_parameter/normal_map_strength = 0.676
+shader_parameter/diffuse_texture = ExtResource("2_wg3is")
+shader_parameter/licap_texture = ExtResource("3_scu71")
+shader_parameter/light_position_w = Vector3(-0.213608, 1.77658, -0.295856)
+shader_parameter/num_gradient_points = 4
+shader_parameter/gradient_stops = PackedColorArray(0, 0, 0, 0, 0.33, 0.33, 0.33, 0.243137, 0.33, 0.33, 0.33, 0.243137, 1, 1, 1, 0.92549)
+shader_parameter/uv_smoothing = 0.0
+shader_parameter/normal_smoothing = 1.0
+shader_parameter/max_derivative = 100.0
+shader_parameter/shadow_tint = Vector3(0.6, 0.7, 1)
+shader_parameter/highlight_tint = Vector3(1, 0.95, 0.85)
+shader_parameter/shadow_hue_shift = -0.05
+shader_parameter/highlight_hue_shift = 0.03
+shader_parameter/saturation_boost = 1.2
+shader_parameter/dark_saturation_boost = 1.0
+shader_parameter/easing_type = 1
