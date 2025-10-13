@@ -13,6 +13,7 @@ varying vec3 world_normal;
 // Uniforms for gradient control points
 uniform int num_gradient_points = 2;
 uniform vec4 gradient_stops[16]:  source_color; //, filter_linear;//source_color;  // RGB = color, A = position
+uniform sampler2D saturation_gradient: source_color;
 
 uniform float uv_smoothing : hint_range(0.0, 0.5) = 0.0;
 
@@ -256,6 +257,7 @@ smooth_normal = normalize(mix(smooth_normal, normal_from_map, normal_map_strengt
 	vec2 uv_coords = clamp(vec2(-u, v) * 0.5 + 0.5, 0.0, 1.0);
 
 	vec4 color = texture(diffuse_texture,UV);
+	vec4 satu_gradient = texture(saturation_gradient,uv_coords);
 
 	float mask_value = texture(licap_texture, uv_coords).r;
 	vec3 mask_col = texture(licap_texture, uv_coords).rgb;
@@ -271,13 +273,16 @@ smooth_normal = normalize(mix(smooth_normal, normal_from_map, normal_map_strengt
 	vec3 color_hsv = rgb2hsv(color.rgb);
 	
 	float color_h = color_hsv.r;
-	float color_s =color_hsv.g;
+	float color_s = saturation_curve(mask_value) *color_hsv.g;//3.0*color_hsv.g *(1.0-mask_value);
 	float color_v = shadow_hsv.b* color_hsv.b;
 	
 	vec3 mixed_hsv = vec3 (color_h, color_s, color_v);
-
+	
+	mixed_hsv.r *= color_s*satu_gradient.r*5.0;
+	
 	vec3 combined_rgb = hsv2rgb(mixed_hsv);
 
-	    ALBEDO = combined_rgb;
+	ALBEDO = combined_rgb;
+	//ALBEDO = color.rgb;
 	}
 		//ALBEDO = vec3(remapped);

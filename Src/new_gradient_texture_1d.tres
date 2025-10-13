@@ -1,7 +1,10 @@
 [gd_resource type="GradientTexture1D" load_steps=2 format=3 uid="uid://bilmd31w6sd40"]
 
 [sub_resource type="Gradient" id="Gradient_irvrr"]
+interpolation_mode = 2
 interpolation_color_space = 2
+offsets = PackedFloat32Array(0.300578, 0.450867, 0.745665)
+colors = PackedColorArray(0, 0, 0, 1, 0.0168233, 0.0168233, 0.0168233, 1, 0.539663, 0.539663, 0.539663, 1)
 
 [resource]
 gradient = SubResource("Gradient_irvrr")
