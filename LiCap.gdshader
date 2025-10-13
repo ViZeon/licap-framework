@@ -333,7 +333,7 @@ void fragment() {
 	
 	vec3 mixed_hsl = vec3(color_h, color_s, color_l);
 	
-	mixed_hsl.r *= satu_luminance * 1.5 + (1.0 - satu_luminance)*sss_luminance;
+	mixed_hsl.r *= satu_luminance * 1.3 + (1.0 - satu_luminance)*sss_luminance;
 	
 	vec3 combined_rgb = hsl2rgb(mixed_hsl);
 
