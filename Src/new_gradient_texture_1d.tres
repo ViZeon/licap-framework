@@ -2,8 +2,8 @@
 
 [sub_resource type="Gradient" id="Gradient_irvrr"]
 interpolation_color_space = 2
-offsets = PackedFloat32Array(0, 0.586592)
-colors = PackedColorArray(0.544974, 0.544974, 0.544974, 1, 0.16446, 0.16446, 0.16446, 1)
+offsets = PackedFloat32Array(0, 0.692737)
+colors = PackedColorArray(0.345809, 0.610767, 0.469516, 1, 0.16446, 0.16446, 0.16446, 1)
 
 [resource]
 gradient = SubResource("Gradient_irvrr")

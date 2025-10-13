@@ -316,7 +316,7 @@ void fragment() {
 	vec3 color_hsl = rgb2hsl(color.rgb);
 	
 	float color_h = color_hsl.r;
-	float color_s = saturation_curve(color_hsl.g)*satu_gradient.r*3.0;
+	float color_s = clamp(saturation_curve(color_hsl.g)*satu_gradient.r*3.0, 0.0, 1.0);
 	float satu_luminance = color_s;
 	
 	
