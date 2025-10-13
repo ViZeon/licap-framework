@@ -2,8 +2,8 @@
 
 [ext_resource type="Shader" uid="uid://b06ligm51i2nd" path="res://LiCap.gdshader" id="1_cncbx"]
 [ext_resource type="Texture2D" uid="uid://8y08p07f8m56" path="res://Src/Prototype_LiCap.jpg" id="2_42u3b"]
-[ext_resource type="Texture2D" uid="uid://dm588ru6r2e7d" path="res://Src/Dante1/t_dante_head_d.tga" id="2_rg4x5"]
-[ext_resource type="Texture2D" uid="uid://dtcxy5jbbgy77" path="res://Src/Dante1/t_dante_head_n.tga" id="4_iykpt"]
+[ext_resource type="Texture2D" uid="uid://dm588ru6r2e7d" path="res://Src/Testing/Dante1/t_dante_head_d.tga" id="2_rg4x5"]
+[ext_resource type="Texture2D" uid="uid://dtcxy5jbbgy77" path="res://Src/Testing/Dante1/t_dante_head_n.tga" id="4_iykpt"]
 [ext_resource type="Texture2D" uid="uid://bilmd31w6sd40" path="res://Src/new_gradient_texture_1d.tres" id="5_iykpt"]
 
 [resource]

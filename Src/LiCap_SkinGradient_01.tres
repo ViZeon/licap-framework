@@ -1,9 +1,9 @@
 [gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://cejbfrmbhsyx"]
 
 [ext_resource type="Shader" uid="uid://b06ligm51i2nd" path="res://LiCap.gdshader" id="1_yem1q"]
-[ext_resource type="Texture2D" uid="uid://dm588ru6r2e7d" path="res://Src/Dante1/t_dante_head_d.tga" id="2_wg3is"]
+[ext_resource type="Texture2D" uid="uid://dm588ru6r2e7d" path="res://Src/Testing/Dante1/t_dante_head_d.tga" id="2_wg3is"]
 [ext_resource type="Texture2D" uid="uid://8y08p07f8m56" path="res://Src/Prototype_LiCap.jpg" id="3_scu71"]
-[ext_resource type="Texture2D" uid="uid://dtcxy5jbbgy77" path="res://Src/Dante1/t_dante_head_n.tga" id="4_15hyk"]
+[ext_resource type="Texture2D" uid="uid://dtcxy5jbbgy77" path="res://Src/Testing/Dante1/t_dante_head_n.tga" id="4_15hyk"]
 
 [resource]
 render_priority = 0
