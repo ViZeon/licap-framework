@@ -1,3 +1,4 @@
+
 shader_type spatial;
 render_mode unshaded;
 
@@ -12,7 +13,7 @@ varying vec3 world_normal;
 
 // Uniforms for gradient control points
 uniform int num_gradient_points = 2;
-uniform vec4 gradient_stops[16]:  source_color; //, filter_linear;//source_color;  // RGB = color, A = position
+uniform vec4 gradient_stops[16]:  source_color;
 uniform sampler2D saturation_gradient: source_color;
 
 uniform float uv_smoothing : hint_range(0.0, 0.5) = 0.0;
@@ -23,31 +24,78 @@ uniform float max_derivative = 0.1;
 varying vec3 tangent_w;
 varying vec3 binormal_w;
 
-uniform vec3 shadow_tint = vec3(0.6, 0.7, 1.0); // Cool shadows
-uniform vec3 highlight_tint = vec3(1.0, 0.95, 0.85); // Warm highlights
-uniform float shadow_hue_shift = -0.05; // Hue shift in shadows (negative = toward blue)
-uniform float highlight_hue_shift = 0.03; // Hue shift in highlights (positive = toward yellow)
-uniform float saturation_boost = 1.2; // Midtone saturation multiplier
-uniform float dark_saturation_boost = 1.0; // Multiplier for dark areas
+uniform float sss_strength;
+
+uniform vec3 shadow_tint = vec3(0.6, 0.7, 1.0);
+uniform vec3 highlight_tint = vec3(1.0, 0.95, 0.85);
+uniform float shadow_hue_shift = -0.05;
+uniform float highlight_hue_shift = 0.03;
+uniform float saturation_boost = 1.2;
+uniform float dark_saturation_boost = 1.0;
 
 // Easing type selector
-uniform int easing_type = 0; // 0 = Linear, 1 = Cardinal
+uniform int easing_type = 0;
 
-// RGB to HSV conversion
-vec3 rgb2hsv(vec3 c) {
-    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
-    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
-    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
-    float d = q.x - min(q.w, q.y);
-    float e = 1.0e-10;
-    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+// RGB to HSL conversion (using Luminance instead of Value)
+vec3 rgb2hsl(vec3 c) {
+    float maxC = max(max(c.r, c.g), c.b);
+    float minC = min(min(c.r, c.g), c.b);
+    float delta = maxC - minC;
+    
+    // Luminance
+    float l = (maxC + minC) / 2.0;
+    
+    // Saturation
+    float s = 0.0;
+    if (delta > 0.0001) {
+        s = l < 0.5 ? delta / (maxC + minC) : delta / (2.0 - maxC - minC);
+    }
+    
+    // Hue
+    float h = 0.0;
+    if (delta > 0.0001) {
+        if (maxC == c.r) {
+            h = (c.g - c.b) / delta + (c.g < c.b ? 6.0 : 0.0);
+        } else if (maxC == c.g) {
+            h = (c.b - c.r) / delta + 2.0;
+        } else {
+            h = (c.r - c.g) / delta + 4.0;
+        }
+        h /= 6.0;
+    }
+    
+    return vec3(h, s, l);
 }
 
-// HSV to RGB conversion
-vec3 hsv2rgb(vec3 c) {
-    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+// HSL to RGB conversion
+vec3 hsl2rgb(vec3 c) {
+    float h = c.x;
+    float s = c.y;
+    float l = c.z;
+    
+    float q = l < 0.5 ? l * (1.0 + s) : l + s - l * s;
+    float p = 2.0 * l - q;
+    
+    vec3 rgb;
+    rgb.r = h + 1.0/3.0;
+    rgb.g = h;
+    rgb.b = h - 1.0/3.0;
+    
+    for(int i = 0; i < 3; i++) {
+        if(rgb[i] < 0.0) rgb[i] += 1.0;
+        if(rgb[i] > 1.0) rgb[i] -= 1.0;
+        
+        if(rgb[i] < 1.0/6.0)
+            rgb[i] = p + (q - p) * 6.0 * rgb[i];
+        else if(rgb[i] < 0.5)
+            rgb[i] = q;
+        else if(rgb[i] < 2.0/3.0)
+            rgb[i] = p + (q - p) * (2.0/3.0 - rgb[i]) * 6.0;
+        else
+            rgb[i] = p;
+    }
+    
+    return rgb;
 }
 
 // Saturation curve - peaks in midtones
@@ -56,6 +104,7 @@ float saturation_curve(float luminance) {
     float mid_boost = 1.0 - 4.0 * pow(luminance - 0.5, 2.0);
     return mix(0.7, saturation_boost, mid_boost);
 }
+
 // Normal
 vec3 blend_normal(vec3 base, vec3 blend, float factor) {
     return mix(base, blend, factor);
@@ -117,6 +166,12 @@ vec3 blend_color_dodge(vec3 base, vec3 blend, float factor) {
     return mix(base, clamp(result, 0.0, 1.0), factor);
 }
 
+// Color Dodge (float version)
+float blend_color_dodge_f(float base, float blend, float factor) {
+    float result = base / (1.0 - blend + 0.0001);
+    return mix(base, clamp(result, 0.0, 1.0), factor);
+}
+
 // Color Burn
 vec3 blend_color_burn(vec3 base, vec3 blend, float factor) {
     vec3 result = 1.0 - (1.0 - base) / (blend + 0.0001);
@@ -156,16 +211,14 @@ vec3 blend_divide(vec3 base, vec3 blend, float factor) {
 
 // Cardinal spline interpolation
 vec3 cardinal_spline(vec3 p0, vec3 p1, vec3 p2, vec3 p3, float t) {
-    float tension = 0.5; // Standard Cardinal spline tension
+    float tension = 0.5;
     
-    // Calculate tangents
     vec3 m1 = (1.0 - tension) * (p2 - p0);
     vec3 m2 = (1.0 - tension) * (p3 - p1);
     
     float t2 = t * t;
     float t3 = t2 * t;
     
-    // Hermite basis functions
     float h00 = 2.0 * t3 - 3.0 * t2 + 1.0;
     float h10 = t3 - 2.0 * t2 + t;
     float h01 = -2.0 * t3 + 3.0 * t2;
@@ -177,7 +230,6 @@ vec3 cardinal_spline(vec3 p0, vec3 p1, vec3 p2, vec3 p3, float t) {
 vec3 evaluate_color_ramp(float input_value) {
     input_value = clamp(input_value, 0.0, 1.0);
 
-    // Find surrounding stops
     int left_idx = 0;
     for (int i = 0; i < num_gradient_points - 1; i++) {
         if (input_value >= gradient_stops[i].a) {
@@ -187,13 +239,11 @@ vec3 evaluate_color_ramp(float input_value) {
 
     int right_idx = min(left_idx + 1, num_gradient_points - 1);
 
-    // Interpolate based on easing type
     float left_pos = gradient_stops[left_idx].a;
     float right_pos = gradient_stops[right_idx].a;
     float blend = (input_value - left_pos) / (right_pos - left_pos + 0.0001);
 
-    if (easing_type == 1) { // Cardinal
-        // Get control points for Cardinal spline
+    if (easing_type == 1) {
         int p0_idx = max(left_idx - 1, 0);
         int p3_idx = min(right_idx + 1, num_gradient_points - 1);
         
@@ -203,7 +253,7 @@ vec3 evaluate_color_ramp(float input_value) {
         vec3 p3 = gradient_stops[p3_idx].rgb;
         
         return cardinal_spline(p0, p1, p2, p3, blend);
-    } else { // Linear (default)
+    } else {
         return mix(gradient_stops[left_idx].rgb, gradient_stops[right_idx].rgb, blend);
     }
 }
@@ -229,28 +279,22 @@ void fragment() {
 		vec3 dNdx = dFdx(world_normal);
 		vec3 dNdy = dFdy(world_normal);
 
-		// Clamp derivative magnitude to prevent edge artifacts
-
 		dNdx = clamp(dNdx, -max_derivative, max_derivative);
 		dNdy = clamp(dNdy, vec3(-max_derivative), vec3(max_derivative));
 
 		smooth_normal = normalize(world_normal - (dNdx + dNdy) * normal_smoothing);
 	}
 
+	vec3 normal_map_sample = texture(normal_map, UV).rgb * 2.0 - 1.0;
+	normal_map_sample.x = -normal_map_sample.x;
 
+	vec3 normal_from_map = normalize(
+	    normal_map_sample.x * tangent_w +
+	    normal_map_sample.y * binormal_w +
+	    normal_map_sample.z * smooth_normal
+	);
 
-	// Sample and transform normal map to world space
-
-vec3 normal_map_sample = texture(normal_map, UV).rgb * 2.0 - 1.0;
-normal_map_sample.x = -normal_map_sample.x; // Flip Y
-
-vec3 normal_from_map = normalize(
-    normal_map_sample.x * tangent_w +
-    normal_map_sample.y * binormal_w +
-    normal_map_sample.z * smooth_normal
-);
-
-smooth_normal = normalize(mix(smooth_normal, normal_from_map, normal_map_strength));
+	smooth_normal = normalize(mix(smooth_normal, normal_from_map, normal_map_strength));
 
 	float u = dot(smooth_normal, light_right);
 	float v = dot(smooth_normal, light_up);
@@ -261,33 +305,39 @@ smooth_normal = normalize(mix(smooth_normal, normal_from_map, normal_map_strengt
 
 	float mask_value = texture(licap_texture, uv_coords).r;
 	vec3 mask_col = texture(licap_texture, uv_coords).rgb;
-	//evaluate_color_ramp(mask_value, UV)
-	//ALBEDO = final_color;
-		//vec3 color_filter_01 = blend_multiply(color.rgb,-mask_col, mask_value*3.0);
+
 	vec3 color_filter_02 = blend_soft_light( evaluate_color_ramp(mask_value),color.rgb, 1);
 	
 	vec3 shadow_albedo = blend_multiply(color.rgb, color.rgb, 1);
 	vec3 final_color = blend_multiply(shadow_albedo,color.rgb, mask_value);
 	
 	vec3 shadow_ramp = evaluate_color_ramp(mask_value);
-	vec3 shadow_hsv = rgb2hsv(shadow_ramp);
-	vec3 color_hsv = rgb2hsv(color.rgb);
+	vec3 shadow_hsl = rgb2hsl(shadow_ramp);
+	vec3 color_hsl = rgb2hsl(color.rgb);
 	
-	float color_h = color_hsv.r;
-	float color_s = saturation_curve(color_hsv.g)*satu_gradient.r*3.0;//3.0*color_hsv.g *(1.0-mask_value);
-	float satu_uminance = color_s;
+	float color_h = color_hsl.r;
+	float color_s = saturation_curve(color_hsl.g)*satu_gradient.r*3.0;
+	float satu_luminance = color_s;
+	
+	
 
-	float color_v =  shadow_hsv.b* color_hsv.b /satu_uminance*3.0;
+
+	float color_l = shadow_hsl.b * color_hsl.b / satu_luminance * 3.0;
 	
-	vec3 mixed_hsv = vec3 (color_h, color_s, color_v);
+		float shadow_amount = -mask_value;
+	float sss_factor = clamp((shadow_amount) * sss_strength * -(1.0-color_l),0.0, 1.0);
+
+	// Apply to luminance channel
+	float sss_luminance = blend_color_dodge_f(color_hsl.b, 0.8, sss_factor);
+	 //color_l = sss_luminance;
 	
-	mixed_hsv.r *= satu_uminance*1.5 +(1.0-satu_uminance) ;
+	vec3 mixed_hsl = vec3(color_h, color_s, color_l);
 	
-	vec3 combined_rgb = hsv2rgb(mixed_hsv);
+	mixed_hsl.r *= satu_luminance * 1.5 + (1.0 - satu_luminance);
 	
-	float abledo_float = satu_uminance;
-	
+	vec3 combined_rgb = hsl2rgb(mixed_hsl);
+
+	float albedo_float = sss_luminance;
 	ALBEDO = combined_rgb;
-	//ALBEDO = vec3(abledo_float, abledo_float, abledo_float);
-	}
-		//ALBEDO = vec3(remapped);
+	ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
+}
