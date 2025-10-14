@@ -8,6 +8,8 @@ uniform sampler2D diffuse_texture: hint_default_white, source_color, filter_line
 uniform sampler2D licap_texture : hint_default_white, source_color, filter_linear, repeat_disable;
 uniform float matcap_intensity;
 uniform sampler2D matcap_texture : hint_default_white, source_color, filter_linear, repeat_disable;
+uniform float matcap_mask_intensity;
+uniform sampler2D matcap_mask_texture : hint_default_white, source_color, filter_linear, repeat_disable;
 uniform vec3 light_position_w;
 
 uniform float liCap_rotation = 90;
@@ -368,7 +370,7 @@ void fragment() {
 	vec3 mask_col = texture(licap_texture, uv_coords).rgb;
 	
 	vec3 matcap_col = texture(matcap_texture, matcap_uv).rgb;
-
+	vec3 matcap_mask = texture(matcap_mask_texture, matcap_uv).rgb;
 	
 
 	
@@ -384,6 +386,7 @@ void fragment() {
 	vec3 color_hsl = rgb2hsl(color.rgb);
 	vec3 matcap_hsl = rgb2hsl(matcap_col);
 	
+	
 	// Mapping what goes to what
 	float color_h = color_hsl.r;//mix(,color_hsl.r,0.1);
 	
@@ -398,7 +401,7 @@ void fragment() {
 	
 	float albedo_float = mask_value;
 	// Blend with your existing color however you want
-	vec3 matcap_blend = blend_soft_light(combined_rgb, matcap_col, matcap_intensity);
+	vec3 matcap_blend = blend_soft_light(combined_rgb, matcap_col, matcap_intensity*matcap_mask.g*matcap_mask_intensity);
 	
 	//ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
 	ALBEDO = matcap_blend;
