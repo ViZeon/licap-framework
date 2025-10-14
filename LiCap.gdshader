@@ -25,13 +25,8 @@ varying vec3 tangent_w;
 varying vec3 binormal_w;
 
 uniform float sss_strength;
-
-uniform vec3 shadow_tint = vec3(0.6, 0.7, 1.0);
-uniform vec3 highlight_tint = vec3(1.0, 0.95, 0.85);
-uniform float shadow_hue_shift = -0.05;
-uniform float highlight_hue_shift = 0.03;
 uniform float saturation_boost = 1.2;
-uniform float dark_saturation_boost = 1.0;
+
 
 // Easing type selector
 uniform int easing_type = 0;
@@ -295,14 +290,15 @@ void fragment() {
 	);
 
 	smooth_normal = normalize(mix(smooth_normal, normal_from_map, normal_map_strength));
-
+	
+	//Values to utilize in shading
 	float u = dot(smooth_normal, light_right);
 	float v = dot(smooth_normal, light_up);
 	vec2 uv_coords = clamp(vec2(-u, v) * 0.5 + 0.5, 0.0, 1.0);
-
+	
 	vec4 color = texture(diffuse_texture,UV);
 	vec4 satu_gradient = texture(saturation_gradient,uv_coords);
-
+	
 	float mask_value = texture(licap_texture, uv_coords).r;
 	vec3 mask_col = texture(licap_texture, uv_coords).rgb;
 
@@ -318,27 +314,13 @@ void fragment() {
 	float color_h = color_hsl.r;
 	float color_s = clamp(saturation_curve(color_hsl.g)*satu_gradient.r*3.0, 0.0, 1.0);
 	float satu_luminance = color_s;
-
-
-
-
-	float color_l = shadow_hsl.b * color_hsl.b / satu_luminance * 1.5;
-
-		float shadow_amount = (1.0 - mask_value);
-	float sss_factor = clamp((shadow_amount) * sss_strength + (1.0-color_l) ,0.0, 1.0);
-
-	// Apply to luminance channel
-	float sss_luminance = blend_color_dodge_f(color_hsl.b, 0.8, sss_factor);
-	 //color_l = sss_luminance;
-
+	float color_l = shadow_hsl.b* color_hsl.b;
 	vec3 mixed_hsl = vec3(color_h, color_s, color_l);
-
-	mixed_hsl.r *= satu_luminance * 1.3 + (1.0 - satu_luminance)*sss_luminance;
-
+	
 	vec3 combined_rgb = hsl2rgb(mixed_hsl);
-
-	float albedo_float =mask_value;
+	
+	//float albedo_float = sss_luminance;
 	ALBEDO = combined_rgb;
-	ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
-	ALBEDO = evaluate_color_ramp(mask_value);
+	//ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
+	//ALBEDO = evaluate_color_ramp(mask_value);
 }

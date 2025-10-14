@@ -1,15 +1,12 @@
-[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://bby8gu6ulspf1"]
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bby8gu6ulspf1"]
 
 [ext_resource type="Texture2D" uid="uid://dm588ru6r2e7d" path="res://Src/Testing/Dante1/t_dante_head_d.tga" id="1_llg58"]
-[ext_resource type="Texture2D" uid="uid://dtcxy5jbbgy77" path="res://Src/Testing/Dante1/t_dante_head_n.tga" id="2_iaxyq"]
 
 [resource]
+shading_mode = 2
+diffuse_mode = 1
 specular_mode = 2
 disable_ambient_light = true
 disable_fog = true
 albedo_texture = ExtResource("1_llg58")
 albedo_texture_force_srgb = true
-normal_enabled = true
-normal_texture = ExtResource("2_iaxyq")
-backlight_enabled = true
-backlight = Color(0.544974, 0.544974, 0.544974, 1)
