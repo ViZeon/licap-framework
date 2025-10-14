@@ -9,18 +9,18 @@
 [resource]
 render_priority = 0
 shader = ExtResource("1_05cci")
-shader_parameter/normal_map = ExtResource("4_f0tw3")
-shader_parameter/normal_map_strength = 0.676
+shader_parameter/tangent_normal_map = ExtResource("4_f0tw3")
+shader_parameter/normal_map_strength = 2.773
 shader_parameter/diffuse_texture = ExtResource("2_47apy")
 shader_parameter/licap_texture = ExtResource("3_xqi4n")
-shader_parameter/light_position_w = Vector3(-0.791497, 1.99864, 0.0948949)
+shader_parameter/light_position_w = Vector3(-0.312624, 1.99175, 0.0482175)
 shader_parameter/liCap_rotation = -90.0
 shader_parameter/num_gradient_points = 4
 shader_parameter/gradient_stops = PackedColorArray(0, 0, 0, 0, 0.5, 0.5, 0.5, 0.219608, 0.42, 0.42, 0.42, 0.164706, 1, 1, 1, 1)
 shader_parameter/saturation_gradient = ExtResource("5_wh4ww")
 shader_parameter/uv_smoothing = 0.0
 shader_parameter/normal_smoothing = 1.0
-shader_parameter/max_derivative = 100.0
+shader_parameter/max_derivative = 0.1
 shader_parameter/sss_strength = 0.0
 shader_parameter/saturation_boost = 1.2
 shader_parameter/easing_type = 1

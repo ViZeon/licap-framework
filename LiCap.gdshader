@@ -2,7 +2,7 @@
 shader_type spatial;
 render_mode unshaded;
 
-uniform sampler2D normal_map : hint_normal, filter_linear;
+uniform sampler2D tangent_normal_map : hint_normal, filter_linear;
 uniform float normal_map_strength : hint_range(0.0, 5.0) = 1.0;
 uniform sampler2D diffuse_texture: hint_default_white, source_color, filter_linear;
 uniform sampler2D licap_texture : hint_default_white, source_color, filter_linear, repeat_disable;
@@ -255,6 +255,29 @@ vec3 evaluate_color_ramp(float input_value) {
     }
 }
 
+// Unpack normal map and convert to world space
+	vec3 apply_normal_map(sampler2D normal_texture, vec2 uv, vec3 tangent, vec3 normal, float strength) {
+    vec3 normal_map = texture(normal_texture, uv).rgb * 2.0 - 1.0;
+    normal_map.xy *= strength;
+    normal_map = normalize(normal_map);
+    
+    vec3 T = normalize(tangent);
+    vec3 N = normalize(normal);
+    vec3 B = cross(N, T); // Calculate binormal instead of using BINORMAL
+    
+    mat3 tbn = mat3(T, B, N);
+    return normalize(tbn * normal_map);
+}
+
+vec3 blend_rnm(vec3 base, vec3 detail, float factor) {
+    // Lerp detail towards neutral normal (0, 0, 1) based on factor
+    detail = mix(vec3(0.0, 0.0, 1.0), detail, factor);
+    
+    base.z += 1.0;
+    detail.xy = -detail.xy;
+    return normalize(base * dot(base, detail) - detail * base.z);
+}
+
 void vertex() {
 	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
     world_normal = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
@@ -284,34 +307,11 @@ void fragment() {
 	vec3 light_right = normalize(cross(vec3(world_pos), light_forward));
 	// what does cross do?
 	vec3 light_up = cross(light_forward, light_right);
-	// Get and normalize distance to light... not sure why this is the first thing since I'll need the distance as value too
-	//in cas something needed to be inverted
-	//Lw = vec3(-Lw.z, Lw.y, Lw.x);
+
+
 	
-		// Values to utilize in shading, still need to understand what dot means but as far as I know, it checks how perpendicular a vector is to another
-	// This is passsing the normals as first vector, and light as the 2nd? are UV coordicates percentage based? so like.. convert normals to a bunch of vectors and access them per frame?
-	float u = dot(world_normal, light_right);
-	float v = dot(world_normal, light_up);
-	// Why clamp? did I overshoot? is it possible to overshoot a UV percentage? or is the map smaller than it should be?
-	vec2 uv_coords = clamp(vec2(-u, v) * 0.5 + 0.5, 0.0, 1.0);
-	
-	
-	// ok so uv_coords is our LiCap mapping? when applied to any texture, it is used like a MatCap/LiCap?
-	vec4 color = texture(diffuse_texture,UV);
-	vec4 satu_gradient = texture(saturation_gradient,uv_coords);
-	
-	float mask_value = texture(licap_texture, uv_coords).r;
-	vec3 mask_col = texture(licap_texture, uv_coords).rgb;
-	
-	
-	
-	
-	float albedo_float = mask_value;
-	
-	ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
-	//ALBEDO = evaluate_color_ramp(mask_value);
-	
-	
+
+
 	
 	//this is passed from the vertex shader, I need to dig up what it does
 	vec3 smooth_normal = world_normal;
@@ -330,20 +330,40 @@ void fragment() {
 		smooth_normal = normalize(world_normal - (dNdx + dNdy) * normal_smoothing);
 	}
 	// I get it's taking the normal map, I don't get the numerical settings, it aso inverts it and I don't remember why
-	vec3 normal_map_sample = texture(normal_map, UV).rgb * 2.0 - 1.0;
-	normal_map_sample.x = -normal_map_sample.x;
+	vec3 normal_map_sample = texture(tangent_normal_map, UV).rgb * 2.0 - 1.0;
+	normal_map_sample.z = -normal_map_sample.z;
 	
-	// This whole section is something I don't understand
-	vec3 normal_from_map = normalize(
-	    normal_map_sample.x * tangent_w +
-	    normal_map_sample.y * binormal_w +
-	    normal_map_sample.z * smooth_normal
-	);
-	
+	    //vec3 surface_normal =  apply_normal_map(tangent_normal_map, UV, smooth_normal, NORMAL, normal_map_strength);
+		//smooth_normal = blend_rnm(smooth_normal, normal_map_sample, normal_map_strength);
+		
 	// so convert normal space then use a simple mix fuction? that kinda feels off for an XYZ map
-	smooth_normal = normalize(mix(smooth_normal, normal_from_map, normal_map_strength));
+	smooth_normal = blend_rnm(smooth_normal, normal_map_sample, normal_map_strength);
+	//smooth_normal - normalize(mix(smooth_normal, normal_map_sample, normal_map_strength));
 	
-
+		// Values to utilize in shading, still need to understand what dot means but as far as I know, it checks how perpendicular a vector is to another
+	// This is passsing the normals as first vector, and light as the 2nd? are UV coordicates percentage based? so like.. convert normals to a bunch of vectors and access them per frame?
+	float u = dot(smooth_normal, light_right);
+	float v = dot(smooth_normal, light_up);
+	// Why clamp? did I overshoot? is it possible to overshoot a UV percentage? or is the map smaller than it should be?
+	vec2 uv_coords = clamp(vec2(-u, v) * 0.5 + 0.5, 0.0, 1.0);
+	
+	
+		// ok so uv_coords is our LiCap mapping? when applied to any texture, it is used like a MatCap/LiCap?
+	vec4 color = texture(diffuse_texture,UV);
+	vec4 satu_gradient = texture(saturation_gradient,uv_coords);
+	
+	float mask_value = texture(licap_texture, uv_coords).r;
+	vec3 mask_col = texture(licap_texture, uv_coords).rgb;
+	
+	
+	
+	float albedo_float = mask_value;
+	
+	ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
+	//ALBEDO = smooth_normal;
+	//evaluate_color_ramp(mask_value);
+	
+	
 	
 	// Yeah all these need a different kind of understanding, gonna have to test in an art software
 	// This is lightening up the mask value based on the gradient? or vice versa?
