@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dcuqid155ecjx"]
+[gd_scene load_steps=16 format=3 uid="uid://dcuqid155ecjx"]
 
 [ext_resource type="Material" uid="uid://y1efon4wxvbi" path="res://Src/LiCap.tres" id="2_8tn2x"]
 [ext_resource type="Script" uid="uid://dlux4mh2cxpb3" path="res://Scripts/Systems/Lighting/scene_light_control.gd" id="3_2au82"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://yb3tmhg57mvr" path="res://Scripts/Systems/Lighting/Nodes/LiCapMesh3D.gd" id="5_ivycn"]
 [ext_resource type="Material" uid="uid://bmvfc3ujkrjq2" path="res://Src/transparent_standard_material_3d.tres" id="6_ivycn"]
 [ext_resource type="ArrayMesh" uid="uid://dyhpnviry4p87" path="res://Src/Testing/Dante1/Dante3.obj" id="7_q1uvj"]
+[ext_resource type="Material" uid="uid://di1xi1203a13g" path="res://Src/LiCap_SkinGradient_03.tres" id="7_r6p7k"]
 [ext_resource type="Material" uid="uid://bby8gu6ulspf1" path="res://Src/Testing/Materials/comparison_standard_material_3d.tres" id="8_qs82m"]
 [ext_resource type="ArrayMesh" uid="uid://cxb28fp7qc2qe" path="res://Src/Testing/r7-x_sniper/r7-x_sniper-rifle.obj" id="9_cqdos"]
 [ext_resource type="Material" uid="uid://dd6usbfe6w07n" path="res://Src/Testing/Materials/comparison-sniper_standard_material_3d.tres" id="10_cqdos"]
@@ -79,9 +80,9 @@ collision_set = true
 metadata/_custom_type_script = "uid://yb3tmhg57mvr"
 
 [node name="LiCapLight" type="Node3D" parent="." node_paths=PackedStringArray("light_control")]
-transform = Transform3D(0.999997, -0.00232129, 0, 0.00232129, 0.999997, 0, 0, 0, 1, -0.312624, 1.99175, 0.0482175)
+transform = Transform3D(0.999997, -0.00232129, 0, 0.00232129, 0.999997, 0, 0, 0, 1, -0.230032, 1.79134, 0.109899)
 script = ExtResource("5_aq4fw")
-licap_mat = Array[Material]([ExtResource("5_cqdos"), ExtResource("10_r6p7k")])
+licap_mat = Array[Material]([ExtResource("5_cqdos"), ExtResource("10_r6p7k"), ExtResource("7_r6p7k")])
 light_var_name = "light_position_w"
 light_control_initialized = true
 detection_area_initialized = true
@@ -101,7 +102,7 @@ surface_material_override/1 = ExtResource("6_ivycn")
 surface_material_override/2 = ExtResource("6_ivycn")
 surface_material_override/3 = ExtResource("6_ivycn")
 surface_material_override/4 = ExtResource("6_ivycn")
-surface_material_override/5 = ExtResource("5_cqdos")
+surface_material_override/5 = ExtResource("7_r6p7k")
 
 [node name="comparison" type="Node" parent="."]
 
@@ -113,7 +114,6 @@ text = "Default Lighting"
 
 [node name="Dante4" type="MeshInstance3D" parent="comparison/Default"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
-visible = false
 mesh = ExtResource("7_q1uvj")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("6_ivycn")

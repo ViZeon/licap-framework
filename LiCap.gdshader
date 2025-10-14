@@ -6,6 +6,8 @@ uniform sampler2D tangent_normal_map : hint_normal, filter_linear;
 uniform float normal_map_strength : hint_range(0.0, 5.0) = 1.0;
 uniform sampler2D diffuse_texture: hint_default_white, source_color, filter_linear;
 uniform sampler2D licap_texture : hint_default_white, source_color, filter_linear, repeat_disable;
+uniform float matcap_intensity;
+uniform sampler2D matcap_texture : hint_default_white, source_color, filter_linear, repeat_disable;
 uniform vec3 light_position_w;
 
 uniform float liCap_rotation = 90;
@@ -340,6 +342,16 @@ void fragment() {
 	smooth_normal = blend_rnm(smooth_normal, normal_map_sample, normal_map_strength);
 	//smooth_normal - normalize(mix(smooth_normal, normal_map_sample, normal_map_strength));
 	
+	// Add after your smooth_normal calculation
+	vec3 view_dir = normalize(CAMERA_POSITION_WORLD - world_pos);
+	vec3 view_right = normalize(cross(vec3(0.0, 1.0, 0.0), view_dir));
+	vec3 view_up = cross(view_dir, view_right);
+
+	// MatCap UV coordinates
+	float u_matcap = dot(smooth_normal, view_right);
+	float v_matcap = dot(smooth_normal, view_up);
+	vec2 matcap_uv = vec2(u_matcap, v_matcap) * 0.5 + 0.5;
+	
 		// Values to utilize in shading, still need to understand what dot means but as far as I know, it checks how perpendicular a vector is to another
 	// This is passsing the normals as first vector, and light as the 2nd? are UV coordicates percentage based? so like.. convert normals to a bunch of vectors and access them per frame?
 	float u = dot(smooth_normal, light_right);
@@ -355,14 +367,10 @@ void fragment() {
 	float mask_value = texture(licap_texture, uv_coords).r;
 	vec3 mask_col = texture(licap_texture, uv_coords).rgb;
 	
+	vec3 matcap_col = texture(matcap_texture, matcap_uv).rgb;
+
 	
-	
-	float albedo_float = mask_value;
-	
-	ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
-	//ALBEDO = smooth_normal;
-	//evaluate_color_ramp(mask_value);
-	
+
 	
 	
 	// Yeah all these need a different kind of understanding, gonna have to test in an art software
@@ -374,19 +382,27 @@ void fragment() {
 	// Splits shadow LiCap and color maps into HSL
 	vec3 shadow_hsl = rgb2hsl(shadow_ramp);
 	vec3 color_hsl = rgb2hsl(color.rgb);
+	vec3 matcap_hsl = rgb2hsl(matcap_col);
 	
 	// Mapping what goes to what
-	float color_h = color_hsl.r;
+	float color_h = color_hsl.r;//mix(,color_hsl.r,0.1);
 	
 	// I don't remember what I did here
-	float color_s = clamp(saturation_curve(color_hsl.g)*satu_gradient.r*3.0, 0.0, 1.0);
-	float satu_luminance = color_s;
-	float color_l = shadow_hsl.b* color_hsl.b;
+	float color_s = mix(clamp(saturation_curve(color_hsl.g)*satu_gradient.r*3.0, 0.0, 1.0), matcap_hsl.g,0.0);
+	float satu_luminance = color_s ;
+	float color_l = blend_color_dodge_f(shadow_hsl.b* color_hsl.b*2.0,matcap_hsl.b,shadow_hsl.b);
 	vec3 mixed_hsl = vec3(color_h, color_s, color_l);
 	
 	// mixing them back
 	vec3 combined_rgb = hsl2rgb(mixed_hsl);
 	
+	float albedo_float = mask_value;
+	// Blend with your existing color however you want
+	vec3 matcap_blend = blend_soft_light(combined_rgb, matcap_col, matcap_intensity);
+	
+	//ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
+	ALBEDO = matcap_blend;
+	//evaluate_color_ramp(mask_value);
 	
 	//ALBEDO = combined_rgb;
 
