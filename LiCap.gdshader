@@ -8,6 +8,8 @@ uniform sampler2D diffuse_texture: hint_default_white, source_color, filter_line
 uniform sampler2D licap_texture : hint_default_white, source_color, filter_linear, repeat_disable;
 uniform vec3 light_position_w;
 
+uniform float liCap_rotation = 90;
+
 varying vec3 world_pos;
 varying vec3 world_normal;
 
@@ -262,17 +264,54 @@ void vertex() {
 
 
 void fragment() {
-	// Get and normalize distance to light... not sure why this is the first thing since I'll need the distance as value too
-	vec3 Lw = normalize(light_position_w - world_pos);
-	//in cas something needed to be inverted
-	Lw = vec3(-Lw.z, Lw.y, Lw.x);
+	
+	float theta = radians(liCap_rotation);
+	float c = cos(theta);
+	float s = sin(theta);
+	
+	theta = theta * PI/2.0;
+	vec3 offset = light_position_w - world_pos;
+	vec3 rotating = vec3 (
+		offset.x*c - offset.z*s, 
+		offset.y,
+		offset.x*s + offset.z*c);
+	vec3 rotated_light_coords = world_pos + rotating;
 	
 	
-	vec3 light_forward = Lw;
+	vec3 Lw = normalize(offset);
+	vec3 light_forward = rotating;
 	//not sure what this is doing, I think it's mapping the coordinates for the texture, or the right axis?
-	vec3 light_right = normalize(cross(vec3(0.0, 1.0, 0.0), light_forward));
+	vec3 light_right = normalize(cross(vec3(world_pos), light_forward));
 	// what does cross do?
 	vec3 light_up = cross(light_forward, light_right);
+	// Get and normalize distance to light... not sure why this is the first thing since I'll need the distance as value too
+	//in cas something needed to be inverted
+	//Lw = vec3(-Lw.z, Lw.y, Lw.x);
+	
+		// Values to utilize in shading, still need to understand what dot means but as far as I know, it checks how perpendicular a vector is to another
+	// This is passsing the normals as first vector, and light as the 2nd? are UV coordicates percentage based? so like.. convert normals to a bunch of vectors and access them per frame?
+	float u = dot(world_normal, light_right);
+	float v = dot(world_normal, light_up);
+	// Why clamp? did I overshoot? is it possible to overshoot a UV percentage? or is the map smaller than it should be?
+	vec2 uv_coords = clamp(vec2(-u, v) * 0.5 + 0.5, 0.0, 1.0);
+	
+	
+	// ok so uv_coords is our LiCap mapping? when applied to any texture, it is used like a MatCap/LiCap?
+	vec4 color = texture(diffuse_texture,UV);
+	vec4 satu_gradient = texture(saturation_gradient,uv_coords);
+	
+	float mask_value = texture(licap_texture, uv_coords).r;
+	vec3 mask_col = texture(licap_texture, uv_coords).rgb;
+	
+	
+	
+	
+	float albedo_float = mask_value;
+	
+	ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
+	//ALBEDO = evaluate_color_ramp(mask_value);
+	
+	
 	
 	//this is passed from the vertex shader, I need to dig up what it does
 	vec3 smooth_normal = world_normal;
@@ -304,27 +343,11 @@ void fragment() {
 	// so convert normal space then use a simple mix fuction? that kinda feels off for an XYZ map
 	smooth_normal = normalize(mix(smooth_normal, normal_from_map, normal_map_strength));
 	
-	// Values to utilize in shading, still need to understand what dot means but as far as I know, it checks how perpendicular a vector is to another
-	// This is passsing the normals as first vector, and light as the 2nd? are UV coordicates percentage based? so like.. convert normals to a bunch of vectors and access them per frame?
-	float u = dot(smooth_normal, light_right);
-	float v = dot(smooth_normal, light_up);
-	// Why clamp? did I overshoot? is it possible to overshoot a UV percentage? or is the map smaller than it should be?
-	vec2 uv_coords = clamp(vec2(-u, v) * 0.5 + 0.5, 0.0, 1.0);
-	
-	// ok so uv_coords is our LiCap mapping? when applied to any texture, it is used like a MatCap/LiCap?
-	vec4 color = texture(diffuse_texture,UV);
-	vec4 satu_gradient = texture(saturation_gradient,uv_coords);
-	
-	float mask_value = texture(licap_texture, uv_coords).r;
-	vec3 mask_col = texture(licap_texture, uv_coords).rgb;
+
 	
 	// Yeah all these need a different kind of understanding, gonna have to test in an art software
 	// This is lightening up the mask value based on the gradient? or vice versa?
 	vec3 color_filter_02 = blend_soft_light( evaluate_color_ramp(mask_value),color.rgb, 1);
-	// I don't think I'm using this anymore
-	vec3 shadow_albedo = blend_multiply(color.rgb, color.rgb, 1);
-	// Nor this
-	vec3 final_color = blend_multiply(shadow_albedo,color.rgb, mask_value);
 	
 	// This applies the ram to the LiCap mask, hmm.. 
 	vec3 shadow_ramp = evaluate_color_ramp(mask_value);
@@ -344,8 +367,7 @@ void fragment() {
 	// mixing them back
 	vec3 combined_rgb = hsl2rgb(mixed_hsl);
 	
-	//float albedo_float = sss_luminance;
-	ALBEDO = combined_rgb;
-	//ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
-	//ALBEDO = evaluate_color_ramp(mask_value);
+	
+	//ALBEDO = combined_rgb;
+
 }

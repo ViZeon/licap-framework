@@ -79,14 +79,13 @@ collision_set = true
 metadata/_custom_type_script = "uid://yb3tmhg57mvr"
 
 [node name="LiCapLight" type="Node3D" parent="." node_paths=PackedStringArray("light_control")]
-transform = Transform3D(0.999997, -0.00232129, 0, 0.00232129, 0.999997, 0, 0, 0, 1, -0.196509, 1.92174, -0.122736)
+transform = Transform3D(0.999997, -0.00232129, 0, 0.00232129, 0.999997, 0, 0, 0, 1, -0.312624, 1.9586, -0.221356)
 script = ExtResource("5_aq4fw")
 licap_mat = Array[Material]([ExtResource("5_cqdos"), ExtResource("10_r6p7k")])
 light_var_name = "light_position_w"
 light_control_initialized = true
 detection_area_initialized = true
 light_id = 0
-light_range = 2.84
 sphere = SubResource("SphereShape3D_8tn2x")
 light_control = NodePath("../SceneLightControl")
 metadata/_custom_type_script = "uid://wnpprgsc35gp"
@@ -114,6 +113,7 @@ text = "Default Lighting"
 
 [node name="Dante4" type="MeshInstance3D" parent="comparison/Default"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+visible = false
 mesh = ExtResource("7_q1uvj")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("6_ivycn")
