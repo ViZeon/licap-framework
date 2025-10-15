@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dcuqid155ecjx"]
+[gd_scene load_steps=17 format=3 uid="uid://dcuqid155ecjx"]
 
 [ext_resource type="Material" uid="uid://y1efon4wxvbi" path="res://Src/LiCap.tres" id="2_8tn2x"]
 [ext_resource type="Script" uid="uid://dlux4mh2cxpb3" path="res://Scripts/Systems/Lighting/scene_light_control.gd" id="3_2au82"]
@@ -12,6 +12,7 @@
 [ext_resource type="ArrayMesh" uid="uid://cxb28fp7qc2qe" path="res://Src/Testing/r7-x_sniper/r7-x_sniper-rifle.obj" id="9_cqdos"]
 [ext_resource type="Material" uid="uid://dd6usbfe6w07n" path="res://Src/Testing/Materials/comparison-sniper_standard_material_3d.tres" id="10_cqdos"]
 [ext_resource type="Material" uid="uid://b3mnvcps1n131" path="res://Src/Testing/Materials/LiCap_Sniper_Rifle.tres" id="10_r6p7k"]
+[ext_resource type="Material" uid="uid://bnkgxkbgsn2k1" path="res://Src/LiCap_SkinGradient_04.tres" id="10_rc7cs"]
 
 [sub_resource type="GDScript" id="GDScript_8tn2x"]
 script/source = "@tool
@@ -102,15 +103,16 @@ surface_material_override/1 = ExtResource("6_ivycn")
 surface_material_override/2 = ExtResource("6_ivycn")
 surface_material_override/3 = ExtResource("6_ivycn")
 surface_material_override/4 = ExtResource("6_ivycn")
-surface_material_override/5 = ExtResource("7_r6p7k")
+surface_material_override/5 = ExtResource("10_rc7cs")
 
-[node name="comparison" type="Node" parent="."]
+[node name="comparison" type="Node3D" parent="."]
+visible = false
 
-[node name="Default" type="Node" parent="comparison"]
+[node name="Default" type="Node3D" parent="comparison"]
 
-[node name="Text_DefaultLighting" type="Label3D" parent="comparison/Default"]
+[node name="Text_DefaultPBR" type="Label3D" parent="comparison/Default"]
 transform = Transform3D(-8.52805e-09, 0, -1, 0, 0.195099, 0, 0.195099, 0, -4.37114e-08, 0, 2.05916, -0.253479)
-text = "Default Lighting"
+text = "Default PBR"
 
 [node name="Dante4" type="MeshInstance3D" parent="comparison/Default"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
@@ -128,11 +130,11 @@ material_override = ExtResource("10_cqdos")
 mesh = ExtResource("9_cqdos")
 skeleton = NodePath("../../..")
 
-[node name="Custom" type="Node" parent="comparison"]
+[node name="Custom" type="Node3D" parent="comparison"]
 
-[node name="Text_CustomLighting" type="Label3D" parent="comparison/Custom"]
+[node name="Text_HotwireNine" type="Label3D" parent="comparison/Custom"]
 transform = Transform3D(-8.52805e-09, 0, -1, 0, 0.195099, 0, 0.195099, 0, -4.37114e-08, 0, 2.05916, 0.0146884)
-text = "Custom Lighting"
+text = "Hotwire Nine"
 
 [node name="R7-xSniper-rifle2" type="MeshInstance3D" parent="comparison/Custom"]
 transform = Transform3D(0.25, 0, -0.433013, 0, 0.5, 0, 0.433013, 0, 0.25, 0, 0, 0.0483729)

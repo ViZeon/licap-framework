@@ -1,10 +1,11 @@
-[gd_resource type="ShaderMaterial" load_steps=7 format=3 uid="uid://bnkgxkbgsn2k1"]
+[gd_resource type="ShaderMaterial" load_steps=8 format=3 uid="uid://bnkgxkbgsn2k1"]
 
 [ext_resource type="Shader" uid="uid://b06ligm51i2nd" path="res://LiCap.gdshader" id="1_s8ifb"]
 [ext_resource type="Texture2D" uid="uid://dm588ru6r2e7d" path="res://Src/Testing/Dante1/t_dante_head_d.tga" id="2_tojgv"]
-[ext_resource type="Texture2D" uid="uid://8y08p07f8m56" path="res://Src/Prototype_LiCap.jpg" id="3_smqiq"]
+[ext_resource type="Texture2D" uid="uid://c6ke3ofrrgrfp" path="res://Src/Testing/MatCaps/495e4fc509aac31e7623eefc306b4bd464eb556e.png" id="3_tojgv"]
 [ext_resource type="Texture2D" uid="uid://dwtpsjyvqc8vk" path="res://Src/Testing/MatCaps/image-asset.jpeg" id="4_ygy2x"]
 [ext_resource type="Texture2D" uid="uid://bilmd31w6sd40" path="res://Src/new_gradient_texture_1d.tres" id="5_e4m3n"]
+[ext_resource type="Texture2D" uid="uid://bmshwpx52mk8w" path="res://Src/Testing/MatCaps/6af86b7a891352e8648b2f41e60dc515f9517336.jpg" id="5_smqiq"]
 [ext_resource type="Texture2D" uid="uid://dtcxy5jbbgy77" path="res://Src/Testing/Dante1/t_dante_head_n.tga" id="6_p6oyo"]
 
 [resource]
@@ -13,10 +14,10 @@ shader = ExtResource("1_s8ifb")
 shader_parameter/tangent_normal_map = ExtResource("6_p6oyo")
 shader_parameter/normal_map_strength = 1.962
 shader_parameter/diffuse_texture = ExtResource("2_tojgv")
-shader_parameter/licap_texture = ExtResource("3_smqiq")
-shader_parameter/matcap_intensity = 1.37
-shader_parameter/matcap_texture = ExtResource("4_ygy2x")
-shader_parameter/matcap_mask_intensity = 1.0
+shader_parameter/licap_texture = ExtResource("3_tojgv")
+shader_parameter/matcap_intensity = 0.0
+shader_parameter/matcap_texture = ExtResource("5_smqiq")
+shader_parameter/matcap_mask_intensity = 0.0
 shader_parameter/matcap_mask_texture = ExtResource("4_ygy2x")
 shader_parameter/light_position_w = Vector3(-0.207159, 1.84398, -0.125862)
 shader_parameter/liCap_rotation = -90.0

@@ -20,4 +20,5 @@ project/assembly_name="LiCap Framework"
 
 [rendering]
 
+renderer/rendering_method="mobile"
 anti_aliasing/quality/screen_space_aa=1

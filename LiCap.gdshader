@@ -1,6 +1,8 @@
 
 shader_type spatial;
 render_mode unshaded;
+stencil_mode 1;
+
 
 uniform sampler2D tangent_normal_map : hint_normal, filter_linear;
 uniform float normal_map_strength : hint_range(0.0, 5.0) = 1.0;
@@ -403,12 +405,12 @@ void fragment() {
 	
 	float albedo_float = mask_value;
 	// Blend with your existing color however you want
-	vec3 matcap_blend = blend_soft_light(combined_rgb, matcap_col, matcap_intensity*matcap_mask.g*matcap_mask_intensity);
+	//vec3 matcap_blend = blend_soft_light(combined_rgb, matcap_col, matcap_intensity*matcap_mask.g*matcap_mask_intensity);
 	
 	//ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
-	ALBEDO = matcap_blend;
+	//ALBEDO = matcap_blend;
 	//evaluate_color_ramp(mask_value);
 	
-	//ALBEDO = combined_rgb;
+	ALBEDO = combined_rgb;
 
 }
