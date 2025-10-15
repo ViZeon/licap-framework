@@ -403,6 +403,7 @@ void fragment() {
 
 
 
+	//color_s = clamp(color_s,0.0,1.0);
 	vec3 mixed_hsl = vec3(color_h, color_s, color_l);
 
 	// mixing them back
@@ -410,7 +411,7 @@ void fragment() {
 	vec3 gamma_correction = pow(combined_rgb, vec3(gamma));
 	float albedo_float = mask_value;
 
-	//ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
+	ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
 	//ALBEDO = matcap_blend;
 	//evaluate_color_ramp(mask_value);
 

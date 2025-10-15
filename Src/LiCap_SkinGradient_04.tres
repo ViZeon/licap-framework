@@ -3,7 +3,7 @@
 [ext_resource type="Shader" uid="uid://b06ligm51i2nd" path="res://LiCap.gdshader" id="1_s8ifb"]
 [ext_resource type="Texture2D" uid="uid://dm588ru6r2e7d" path="res://Src/Testing/Dante1/t_dante_head_d.tga" id="2_tojgv"]
 [ext_resource type="Texture2D" uid="uid://baje6hxffvy18" path="res://Src/Testing/MatCaps/Fresnel_01.jpg" id="3_s0q13"]
-[ext_resource type="Texture2D" uid="uid://8y08p07f8m56" path="res://Src/Prototype_LiCap.jpg" id="4_s0q13"]
+[ext_resource type="Texture2D" uid="uid://8y08p07f8m56" path="res://Src/Testing/MatCaps/Prototype_LiCap.jpg" id="4_s0q13"]
 [ext_resource type="Texture2D" uid="uid://dtcxy5jbbgy77" path="res://Src/Testing/Dante1/t_dante_head_n.tga" id="6_p6oyo"]
 
 [resource]
@@ -15,11 +15,11 @@ shader_parameter/diffuse_texture = ExtResource("2_tojgv")
 shader_parameter/licap_texture = ExtResource("4_s0q13")
 shader_parameter/fresnel_intensity = 0.0
 shader_parameter/fresnel_matcap = ExtResource("3_s0q13")
-shader_parameter/light_position_w = Vector3(-0.27574897, 1.83615, -0.13208537)
+shader_parameter/light_position_w = Vector3(-0.20683213, 1.7394619, -0.080133)
 shader_parameter/liCap_rotation = -90.0
 shader_parameter/gamma = 2.2
-shader_parameter/gradient_points_count = 2
-shader_parameter/gradient_point_list = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1)
+shader_parameter/gradient_points_count = 3
+shader_parameter/gradient_point_list = PackedColorArray(0, 0, 0, 0, 1.0237244, 1.0237244, 1.0237244, 0.7372549, 1, 1, 1, 1)
 shader_parameter/easing_type = 1
 shader_parameter/normal_smoothing = 1.0
 shader_parameter/max_derivative = 100.0

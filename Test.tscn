@@ -81,7 +81,7 @@ collision_set = true
 metadata/_custom_type_script = "uid://yb3tmhg57mvr"
 
 [node name="LiCapLight" type="Node3D" parent="." node_paths=PackedStringArray("light_control")]
-transform = Transform3D(0.999997, -0.00232129, 0, 0.00232129, 0.999997, 0, 0, 0, 1, -0.27574897, 1.83615, -0.13208537)
+transform = Transform3D(0.999997, -0.00232129, 0, 0.00232129, 0.999997, 0, 0, 0, 1, -0.20723478, 1.7873771, -0.13943246)
 script = ExtResource("5_aq4fw")
 licap_mat = Array[Material]([ExtResource("5_cqdos"), ExtResource("10_r6p7k"), ExtResource("7_r6p7k"), ExtResource("2_8tn2x"), ExtResource("10_rc7cs")])
 light_var_name = "light_position_w"
@@ -93,11 +93,180 @@ light_control = NodePath("../SceneLightControl")
 metadata/_custom_type_script = "uid://wnpprgsc35gp"
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="LiCapLight"]
+light_energy = 0.76
 light_indirect_energy = 16.0
 
 [node name="Dante3" type="MeshInstance3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
 mesh = ExtResource("7_q1uvj")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="StressTest" type="Node3D" parent="."]
+visible = false
+
+[node name="Dante4" type="MeshInstance3D" parent="StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="Dante5" type="MeshInstance3D" parent="StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="Dante6" type="MeshInstance3D" parent="StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="Dante7" type="MeshInstance3D" parent="StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="Dante8" type="MeshInstance3D" parent="StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="Dante9" type="MeshInstance3D" parent="StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="Dante10" type="MeshInstance3D" parent="StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="Dante11" type="MeshInstance3D" parent="StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="Dante12" type="MeshInstance3D" parent="StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="Dante13" type="MeshInstance3D" parent="StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="Dante14" type="MeshInstance3D" parent="StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="Dante15" type="MeshInstance3D" parent="StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="Dante16" type="MeshInstance3D" parent="StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="Dante17" type="MeshInstance3D" parent="StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="Dante18" type="MeshInstance3D" parent="StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("6_ivycn")
 surface_material_override/1 = ExtResource("6_ivycn")
 surface_material_override/2 = ExtResource("6_ivycn")
@@ -117,6 +286,159 @@ text = "Default PBR"
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
 mesh = ExtResource("7_q1uvj")
 skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
+
+[node name="StressTest" type="Node3D" parent="comparison/Default"]
+visible = false
+
+[node name="Dante5" type="MeshInstance3D" parent="comparison/Default/StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
+
+[node name="Dante6" type="MeshInstance3D" parent="comparison/Default/StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
+
+[node name="Dante7" type="MeshInstance3D" parent="comparison/Default/StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
+
+[node name="Dante8" type="MeshInstance3D" parent="comparison/Default/StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
+
+[node name="Dante9" type="MeshInstance3D" parent="comparison/Default/StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
+
+[node name="Dante10" type="MeshInstance3D" parent="comparison/Default/StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
+
+[node name="Dante11" type="MeshInstance3D" parent="comparison/Default/StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
+
+[node name="Dante12" type="MeshInstance3D" parent="comparison/Default/StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
+
+[node name="Dante13" type="MeshInstance3D" parent="comparison/Default/StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
+
+[node name="Dante14" type="MeshInstance3D" parent="comparison/Default/StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
+
+[node name="Dante15" type="MeshInstance3D" parent="comparison/Default/StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
+
+[node name="Dante16" type="MeshInstance3D" parent="comparison/Default/StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
+
+[node name="Dante17" type="MeshInstance3D" parent="comparison/Default/StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
+
+[node name="Dante18" type="MeshInstance3D" parent="comparison/Default/StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = ExtResource("8_qs82m")
+
+[node name="Dante19" type="MeshInstance3D" parent="comparison/Default/StressTest"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.248401)
+mesh = ExtResource("7_q1uvj")
+skeleton = NodePath("../../../..")
 surface_material_override/0 = ExtResource("6_ivycn")
 surface_material_override/1 = ExtResource("6_ivycn")
 surface_material_override/3 = ExtResource("6_ivycn")
