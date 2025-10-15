@@ -13,24 +13,29 @@ uniform sampler2D fresnel_matcap : hint_default_white, source_color, filter_line
 uniform vec3 light_position_w;
 
 uniform float liCap_rotation = 90;
+uniform float gamma = 2.2;
 
-varying vec3 world_pos;
-varying vec3 world_normal;
 
 // Uniforms for gradient control points
+uniform int gradient_points_count = 2;
 uniform vec4 gradient_point_list[16]:  source_color;
+// Easing type selector
+uniform int easing_type = 0;
+
 uniform sampler2D baked_gradient: source_color;
 
 
 uniform float normal_smoothing : hint_range(0.0, 1.0) = 0.0;
 uniform float max_derivative = 0.1;
 
+varying vec3 world_pos;
+varying vec3 world_normal;
+
 varying vec3 tangent_w;
 varying vec3 binormal_w;
 
 
-// Easing type selector
-uniform int easing_type = 0;
+
 
 // RGB to HSL conversion (using Luminance instead of Value)
 vec3 rgb2hsl(vec3 c) {
@@ -223,17 +228,17 @@ vec3 cardinal_spline(vec3 p0, vec3 p1, vec3 p2, vec3 p3, float t) {
     return h00 * p1 + h10 * m1 + h01 * p2 + h11 * m2;
 }
 
-vec3 evaluate_color_ramp(float input_value, vec4[16] gradient_stops) {
+vec3 evaluate_color_ramp(float input_value, vec4[16] gradient_stops, int points_count) {
     input_value = clamp(input_value, 0.0, 1.0);
 
     int left_idx = 0;
-    for (int i = 0; i < gradient_stops.length() - 1; i++) {
+    for (int i = 0; i < points_count - 1; i++) {
         if (input_value >= gradient_stops[i].a) {
             left_idx = i;
         }
     }
 
-    int right_idx = min(left_idx + 1, gradient_stops.length() - 1);
+    int right_idx = min(left_idx + 1, points_count - 1);
 
     float left_pos = gradient_stops[left_idx].a;
     float right_pos = gradient_stops[right_idx].a;
@@ -241,7 +246,7 @@ vec3 evaluate_color_ramp(float input_value, vec4[16] gradient_stops) {
 
     if (easing_type == 1) {
         int p0_idx = max(left_idx - 1, 0);
-        int p3_idx = min(right_idx + 1, gradient_stops.length() - 1);
+        int p3_idx = min(right_idx + 1, points_count - 1);
 
         vec3 p0 = gradient_stops[p0_idx].rgb;
         vec3 p1 = gradient_stops[left_idx].rgb;
@@ -359,6 +364,7 @@ void fragment() {
 
 		// ok so uv_coords is our LiCap mapping? when applied to any texture, it is used like a MatCap/LiCap?
 	vec4 color = texture(diffuse_texture,UV);
+	color = vec4(pow(color.rgb, vec3(1.0/gamma)), color.a);
 	vec4 baked_gradient_tex = texture(baked_gradient,uv_coords);
 
 	float mask_value = texture(licap_texture, uv_coords).r;
@@ -372,10 +378,13 @@ void fragment() {
 
 	// Yeah all these need a different kind of understanding, gonna have to test in an art software
 	// This is lightening up the mask value based on the gradient? or vice versa?
-	vec3 color_filter_02 = blend_soft_light( evaluate_color_ramp(mask_value, gradient_point_list),color.rgb, 1);
+	//vec3 color_filter_02 = blend_soft_light( evaluate_color_ramp(mask_value, gradient_point_list, gradient_points_count),color.rgb, 1);
 
 	// This applies the ram to the LiCap mask, hmm..
-	vec3 shadow_ramp = evaluate_color_ramp(mask_value, gradient_point_list);
+	vec3 shadow_ramp = evaluate_color_ramp(mask_value, gradient_point_list, gradient_points_count);
+
+	//color.rgb = color.rgb*shadow_ramp;
+
 	// Splits shadow LiCap and color maps into HSL
 	vec3 shadow_hsl = rgb2hsl(shadow_ramp);
 	vec3 color_hsl = rgb2hsl(color.rgb);
@@ -387,7 +396,10 @@ void fragment() {
 	float color_s = color_hsl.g;
 	float color_l = color_hsl.b;
 
-
+	// apply shadow
+	//color_h = color_h * shadow_hsl.b;
+	color_s = color_s / shadow_hsl.b;
+	color_l = color_l * shadow_hsl.b;
 
 
 
@@ -395,13 +407,13 @@ void fragment() {
 
 	// mixing them back
 	vec3 combined_rgb = hsl2rgb(mixed_hsl);
-
+	vec3 gamma_correction = pow(combined_rgb, vec3(gamma));
 	float albedo_float = mask_value;
 
 	//ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
 	//ALBEDO = matcap_blend;
 	//evaluate_color_ramp(mask_value);
 
-	ALBEDO = combined_rgb;
+	ALBEDO = gamma_correction;
 
 }

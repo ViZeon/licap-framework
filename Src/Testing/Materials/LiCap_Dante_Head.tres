@@ -1,10 +1,9 @@
-[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://bt4f4sxgm6udi"]
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://bt4f4sxgm6udi"]
 
 [ext_resource type="Shader" uid="uid://b06ligm51i2nd" path="res://LiCap.gdshader" id="1_05cci"]
 [ext_resource type="Texture2D" uid="uid://dm588ru6r2e7d" path="res://Src/Testing/Dante1/t_dante_head_d.tga" id="2_47apy"]
-[ext_resource type="Texture2D" uid="uid://dtooiy0rsmgyx" path="res://Src/Testing/Materials/LiCap_Skin_03_gradient_texture_1d.tres" id="3_is6ur"]
+[ext_resource type="Texture2D" uid="uid://8y08p07f8m56" path="res://Src/Prototype_LiCap.jpg" id="3_jiyu2"]
 [ext_resource type="Texture2D" uid="uid://dtcxy5jbbgy77" path="res://Src/Testing/Dante1/t_dante_head_n.tga" id="4_f0tw3"]
-[ext_resource type="Texture2D" uid="uid://bilmd31w6sd40" path="res://Src/new_gradient_texture_1d.tres" id="5_wh4ww"]
 
 [resource]
 render_priority = 0
@@ -12,15 +11,13 @@ shader = ExtResource("1_05cci")
 shader_parameter/tangent_normal_map = ExtResource("4_f0tw3")
 shader_parameter/normal_map_strength = 2.0
 shader_parameter/diffuse_texture = ExtResource("2_47apy")
-shader_parameter/licap_texture = ExtResource("3_is6ur")
-shader_parameter/light_position_w = Vector3(-0.230032, 1.79134, -0.120179)
+shader_parameter/licap_texture = ExtResource("3_jiyu2")
+shader_parameter/fresnel_intensity = 0.0
+shader_parameter/light_position_w = Vector3(-0.27865443, 1.8132441, -0.03399733)
 shader_parameter/liCap_rotation = -90.0
-shader_parameter/num_gradient_points = 2
-shader_parameter/gradient_stops = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1)
-shader_parameter/saturation_gradient = ExtResource("5_wh4ww")
-shader_parameter/uv_smoothing = 0.0
+shader_parameter/gamma = 2.2
+shader_parameter/gradient_points_count = 2
+shader_parameter/gradient_point_list = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/easing_type = 1
 shader_parameter/normal_smoothing = 1.0
 shader_parameter/max_derivative = 0.1
-shader_parameter/sss_strength = 0.0
-shader_parameter/saturation_boost = 1.2
-shader_parameter/easing_type = 1
