@@ -390,6 +390,8 @@ void fragment() {
 	// Mapping what goes to what
 	float color_h = color_hsl.r;//mix(,color_hsl.r,0.1);
 	
+	
+	
 	// I don't remember what I did here
 	float color_s = mix(clamp(saturation_curve(color_hsl.g)*satu_gradient.r*3.0, 0.0, 1.0), matcap_hsl.g,0.0);
 	float satu_luminance = color_s ;

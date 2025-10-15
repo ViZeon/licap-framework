@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="LiCap Framework"
-config/features=PackedStringArray("4.4", "Mobile")
+config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"
 
 [dotnet]
@@ -20,5 +20,4 @@ project/assembly_name="LiCap Framework"
 
 [rendering]
 
-renderer/rendering_method="mobile"
 anti_aliasing/quality/screen_space_aa=1

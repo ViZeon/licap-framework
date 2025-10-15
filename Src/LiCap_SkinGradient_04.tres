@@ -1,0 +1,31 @@
+[gd_resource type="ShaderMaterial" load_steps=7 format=3 uid="uid://bnkgxkbgsn2k1"]
+
+[ext_resource type="Shader" uid="uid://b06ligm51i2nd" path="res://LiCap.gdshader" id="1_s8ifb"]
+[ext_resource type="Texture2D" uid="uid://dm588ru6r2e7d" path="res://Src/Testing/Dante1/t_dante_head_d.tga" id="2_tojgv"]
+[ext_resource type="Texture2D" uid="uid://8y08p07f8m56" path="res://Src/Prototype_LiCap.jpg" id="3_smqiq"]
+[ext_resource type="Texture2D" uid="uid://dwtpsjyvqc8vk" path="res://Src/Testing/MatCaps/image-asset.jpeg" id="4_ygy2x"]
+[ext_resource type="Texture2D" uid="uid://bilmd31w6sd40" path="res://Src/new_gradient_texture_1d.tres" id="5_e4m3n"]
+[ext_resource type="Texture2D" uid="uid://dtcxy5jbbgy77" path="res://Src/Testing/Dante1/t_dante_head_n.tga" id="6_p6oyo"]
+
+[resource]
+render_priority = 1
+shader = ExtResource("1_s8ifb")
+shader_parameter/tangent_normal_map = ExtResource("6_p6oyo")
+shader_parameter/normal_map_strength = 1.962
+shader_parameter/diffuse_texture = ExtResource("2_tojgv")
+shader_parameter/licap_texture = ExtResource("3_smqiq")
+shader_parameter/matcap_intensity = 1.37
+shader_parameter/matcap_texture = ExtResource("4_ygy2x")
+shader_parameter/matcap_mask_intensity = 1.0
+shader_parameter/matcap_mask_texture = ExtResource("4_ygy2x")
+shader_parameter/light_position_w = Vector3(-0.207159, 1.84398, -0.125862)
+shader_parameter/liCap_rotation = -90.0
+shader_parameter/num_gradient_points = 4
+shader_parameter/gradient_stops = PackedColorArray(0, 0, 0, 0, 0.33, 0.33, 0.33, 0.141176, 0.33, 0.33, 0.33, 0.117647, 1, 1, 1, 0.909804)
+shader_parameter/saturation_gradient = ExtResource("5_e4m3n")
+shader_parameter/uv_smoothing = 0.0
+shader_parameter/normal_smoothing = 1.0
+shader_parameter/max_derivative = 100.0
+shader_parameter/sss_strength = 0.0
+shader_parameter/saturation_boost = 1.0
+shader_parameter/easing_type = 1
