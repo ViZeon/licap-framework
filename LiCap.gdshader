@@ -1,8 +1,6 @@
-
 shader_type spatial;
 render_mode unshaded;
-stencil_mode 1;
-
+render_mode cull_disabled;
 
 uniform sampler2D tangent_normal_map : hint_normal, filter_linear;
 uniform float normal_map_strength : hint_range(0.0, 5.0) = 1.0;
@@ -310,11 +308,17 @@ void fragment() {
 
 
 	vec3 Lw = normalize(offset);
-	vec3 light_forward = rotating;
+
+	// LUT: Build light-perpendicular basis
+	vec3 light_forward = normalize(Lw);
 	//not sure what this is doing, I think it's mapping the coordinates for the texture, or the right axis?
-	vec3 light_right = normalize(cross(vec3(world_pos), light_forward));
-	// what does cross do?
-	vec3 light_up = cross(light_forward, light_right);
+	vec3 light_right = normalize(cross(light_forward, vec3(0, 1, 0)));
+	// what does cross do? - Creates perpendicular vector
+	vec3 light_up = cross(light_right, light_forward);
+
+	// Calculate distance from light
+	float dist = length(offset);
+	float normalized_dist = dist / 100.0; // Adjust for scene scale
 
 
 
@@ -347,6 +351,9 @@ void fragment() {
 	// so convert normal space then use a simple mix fuction? that kinda feels off for an XYZ map
 	smooth_normal = blend_rnm(smooth_normal, normal_map_sample, normal_map_strength);
 	//smooth_normal - normalize(mix(smooth_normal, normal_map_sample, normal_map_strength));
+
+	// Check if surface faces light
+	float facing = dot(smooth_normal, light_forward);
 
 	// Add after your smooth_normal calculation
 	vec3 view_dir = normalize(CAMERA_POSITION_WORLD - world_pos);
@@ -416,14 +423,13 @@ void fragment() {
 	float albedo_float = mask_value;
 
 
+	// LUT OUTPUT: Store distance if facing light, else max distance
+	if (facing > 0.0) {
+		ALBEDO = vec3(normalized_dist);
+	} else {
+		ALBEDO = vec3(1.0); // Occluded
+	}
 
-    //ALBEDO = vec3(0.8) * shadow;
-
-
-	ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
-	ALBEDO = shadow_ramp;
-	//evaluate_color_ramp(mask_value);
-
-	ALBEDO = gamma_correction;
-
+	// Original rendering (comment out for Pass 1):
+	// ALBEDO = gamma_correction;
 }
