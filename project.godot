@@ -21,4 +21,5 @@ project/assembly_name="LiCap Framework"
 [rendering]
 
 renderer/rendering_method="mobile"
+viewport/hdr_2d=true
 anti_aliasing/quality/screen_space_aa=1

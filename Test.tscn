@@ -81,7 +81,7 @@ collision_set = true
 metadata/_custom_type_script = "uid://yb3tmhg57mvr"
 
 [node name="LiCapLight" type="Node3D" parent="." node_paths=PackedStringArray("light_control")]
-transform = Transform3D(0.999997, -0.00232129, 0, 0.00232129, 0.999997, 0, 0, 0, 1, -0.20723478, 1.9067948, -0.13329908)
+transform = Transform3D(0.999997, -0.00232129, 0, 0.00232129, 0.999997, 0, 0, 0, 1, -0.262, 1.882, -0.302)
 script = ExtResource("5_aq4fw")
 licap_mat = Array[Material]([ExtResource("5_cqdos"), ExtResource("10_r6p7k"), ExtResource("7_r6p7k"), ExtResource("2_8tn2x"), ExtResource("10_rc7cs")])
 light_var_name = "light_position_w"

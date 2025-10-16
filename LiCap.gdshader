@@ -282,6 +282,10 @@ vec3 blend_rnm(vec3 base, vec3 detail, float factor) {
     return normalize(base * dot(base, detail) - detail * base.z);
 }
 
+void calc_shadows ( ){
+
+}
+
 void vertex() {
 	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
     world_normal = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
@@ -411,8 +415,13 @@ void fragment() {
 	vec3 gamma_correction = pow(combined_rgb, vec3(gamma));
 	float albedo_float = mask_value;
 
+
+
+    //ALBEDO = vec3(0.8) * shadow;
+
+
 	ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
-	//ALBEDO = matcap_blend;
+	ALBEDO = shadow_ramp;
 	//evaluate_color_ramp(mask_value);
 
 	ALBEDO = gamma_correction;
