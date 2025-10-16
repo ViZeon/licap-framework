@@ -11,6 +11,7 @@ uniform sampler2D licap_texture : hint_default_white, source_color, filter_linea
 uniform float fresnel_intensity;
 uniform sampler2D fresnel_matcap : hint_default_white, source_color, filter_linear, repeat_disable;
 uniform vec3 light_position_w;
+uniform float light_range = 5.0;
 
 uniform float liCap_rotation = 90;
 uniform float gamma = 2.2;
@@ -28,12 +29,22 @@ uniform sampler2D baked_gradient: source_color;
 uniform float normal_smoothing : hint_range(0.0, 1.0) = 0.0;
 uniform float max_derivative = 0.1;
 
+// The distance (in world units) for the full falloff.
+uniform float falloff_radius : hint_range(0.1, 50.0) = 15.0;
+
+// Steepness of the fade (Higher = sharper).
+uniform float sharpness : hint_range(1.0, 10.0) = 4.0;
+
+// The color and maximum opacity (alpha) of the mask.
+uniform vec4 shadow_mask_color;
+
 varying vec3 world_pos;
 varying vec3 world_normal;
 
 varying vec3 tangent_w;
 varying vec3 binormal_w;
 
+varying vec3 shadow_map;
 
 
 
@@ -366,10 +377,10 @@ void fragment() {
 	vec2 uv_coords = clamp(vec2(-u, v) * 0.5 + 0.5, 0.0, 1.0);
 
 	    // Transform world_pos to light space
-    vec3 relative_pos = world_pos - light_position_w;
+    vec3 relative_pos = world_pos - rotated_light_coords;
     vec2 light_space_xy = vec2(
-        dot(relative_pos, light_right),
-        dot(relative_pos, light_up)
+        dot(smooth_normal, light_right),
+        dot(smooth_normal, light_up)
 		);
 
 		// ok so uv_coords is our LiCap mapping? when applied to any texture, it is used like a MatCap/LiCap?
@@ -419,18 +430,12 @@ void fragment() {
 	// mixing them back
 	vec3 combined_rgb = hsl2rgb(mixed_hsl);
 	vec3 gamma_correction = pow(combined_rgb, vec3(gamma));
-	float albedo_float = mask_value;
+	
 
 
 
-    //ALBEDO = vec3(0.8) * shadow;
 
 
-	ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
-	ALBEDO = shadow_ramp;
-	//evaluate_color_ramp(mask_value);
-
-	ALBEDO = gamma_correction;
 
 
 	    // Light direction
@@ -438,15 +443,95 @@ void fragment() {
     float dist = length(to_light);
     vec3 light_dir = to_light / dist;
 	    // Check if facing light
-    float facing = dot(world_normal, rotated_light_coords);
+    float facing = dot(smooth_normal, rotated_light_coords);
+	float range_place = light_range - distance(world_pos, rotated_light_coords) ;
+	 // 2. Normalize the distance and clamp it. (0.0 near light, 1.0 far away).
+    float normalized_dist = clamp(dist / falloff_radius, 0.0, 1.0);
 
+    // 3. Apply sharpness to create the mask strength curve.
+    float mask_strength = pow(normalized_dist, sharpness);
 
-	if(!(facing > 0.0)) {
-        ALBEDO = vec3(dist / 100.0); // Store distance
-    } else {
-        ALBEDO = vec3(1.0); // Max distance = shadowed
-    }
+	vec3 color_start = vec3(1.0,1.0,1.0);
+	vec3 color_end = vec3(0.0,0.0,0.0);
+    // 4. Set ALBEDO and modulate ALPHA with the calculated mask strength.
+    vec3 shadow_mask_ramp = mix(color_start, color_end, normalized_dist);
+    //ALPHA = shadow_mask_color.a * mask_strength;
+	
+if ((shadow_mask_ramp.r < shadow_map.r))
+{
+
+	//shadow_map.r = shadow_mask_ramp.r; // Store distance
+	//shadow_map.g = 0.0;
+
 }
+else
+{
+	//ALBEDO.b = 0.0;
+}
+
+//ALBEDO = shadow_map;
+    //ALBEDO = vec3(0.8) * shadow;
+float albedo_float = shadow_map.r;
+
+	ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
+	ALBEDO = shadow_map;
+	//evaluate_color_ramp(mask_value);
+
+	//ALBEDO = gamma_correction;
+	/*
+		if(!(facing > 0.0)) {
+	        ALBEDO = vec3(dist / 100.0); // Store distance
+	    } else {
+	        if (!(ALBEDO== vec3(1.0)))
+			ALBEDO = vec3(0.0); // Max distance = shadowed
+	    }
+	*/
+	
+
+}
+
+/*shader_type spatial;
+
+// CRITICAL RENDER MODES for a transparent overlay mask:
+// 1. `unshaded`: Ignores scene lighting (mask color is constant).
+// 2. `alpha_blend`: Enables transparency blending.
+// 3. `depth_draw_never`: Prevents the mask from blocking other objects' rendering.
+render_mode unshaded, alpha_blend, depth_draw_never;
+
+// The 3D world coordinates (x, y, z) of the light source.
+uniform vec3 light_world_pos = vec3(0.0, 5.0, 0.0);
+
+// The distance (in world units) for the full falloff.
+uniform float falloff_radius : hint_range(0.1, 50.0) = 15.0;
+
+// Steepness of the fade (Higher = sharper).
+uniform float sharpness : hint_range(1.0, 10.0) = 4.0;
+
+// The color and maximum opacity (alpha) of the mask.
+uniform vec4 mask_color : hint_color = vec4(0.0, 0.0, 0.0, 0.9);
+
+varying vec3 world_fragment_pos;
+
+void vertex() {
+    // Pass the fragment's world position to the fragment shader.
+    world_fragment_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+}
+
+void fragment() {
+    // 1. Calculate Euclidean distance in 3D space.
+    float dist = distance(world_fragment_pos, light_world_pos);
+
+    // 2. Normalize the distance and clamp it. (0.0 near light, 1.0 far away).
+    float normalized_dist = clamp(dist / falloff_radius, 0.0, 1.0);
+
+    // 3. Apply sharpness to create the mask strength curve.
+    float mask_strength = pow(normalized_dist, sharpness);
+
+    // 4. Set ALBEDO and modulate ALPHA with the calculated mask strength.
+    ALBEDO = mask_color.rgb;
+    ALPHA = mask_color.a * mask_strength;
+}*/
+
 
 /*
     // Get world position and normal
