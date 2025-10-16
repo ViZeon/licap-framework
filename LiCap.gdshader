@@ -1,6 +1,8 @@
+
 shader_type spatial;
 render_mode unshaded;
-render_mode cull_disabled;
+stencil_mode 1;
+
 
 uniform sampler2D tangent_normal_map : hint_normal, filter_linear;
 uniform float normal_map_strength : hint_range(0.0, 5.0) = 1.0;
@@ -308,17 +310,11 @@ void fragment() {
 
 
 	vec3 Lw = normalize(offset);
-
-	// LUT: Build light-perpendicular basis
-	vec3 light_forward = normalize(Lw);
+	vec3 light_forward = rotating;
 	//not sure what this is doing, I think it's mapping the coordinates for the texture, or the right axis?
-	vec3 light_right = normalize(cross(light_forward, vec3(0, 1, 0)));
-	// what does cross do? - Creates perpendicular vector
-	vec3 light_up = cross(light_right, light_forward);
-
-	// Calculate distance from light
-	float dist = length(offset);
-	float normalized_dist = dist / 100.0; // Adjust for scene scale
+	vec3 light_right = normalize(cross(vec3(world_pos), light_forward));
+	// what does cross do?
+	vec3 light_up = cross(light_forward, light_right);
 
 
 
@@ -352,9 +348,6 @@ void fragment() {
 	smooth_normal = blend_rnm(smooth_normal, normal_map_sample, normal_map_strength);
 	//smooth_normal - normalize(mix(smooth_normal, normal_map_sample, normal_map_strength));
 
-	// Check if surface faces light
-	float facing = dot(smooth_normal, light_forward);
-
 	// Add after your smooth_normal calculation
 	vec3 view_dir = normalize(CAMERA_POSITION_WORLD - world_pos);
 	vec3 view_right = normalize(cross(vec3(0.0, 1.0, 0.0), view_dir));
@@ -372,6 +365,12 @@ void fragment() {
 	// Why clamp? did I overshoot? is it possible to overshoot a UV percentage? or is the map smaller than it should be?
 	vec2 uv_coords = clamp(vec2(-u, v) * 0.5 + 0.5, 0.0, 1.0);
 
+	    // Transform world_pos to light space
+    vec3 relative_pos = world_pos - light_position_w;
+    vec2 light_space_xy = vec2(
+        dot(relative_pos, light_right),
+        dot(relative_pos, light_up)
+		);
 
 		// ok so uv_coords is our LiCap mapping? when applied to any texture, it is used like a MatCap/LiCap?
 	vec4 color = texture(diffuse_texture,UV);
@@ -423,13 +422,60 @@ void fragment() {
 	float albedo_float = mask_value;
 
 
-	// LUT OUTPUT: Store distance if facing light, else max distance
-	if (facing > 0.0) {
-		ALBEDO = vec3(normalized_dist);
-	} else {
-		ALBEDO = vec3(1.0); // Occluded
-	}
 
-	// Original rendering (comment out for Pass 1):
-	// ALBEDO = gamma_correction;
+    //ALBEDO = vec3(0.8) * shadow;
+
+
+	ALBEDO = vec3(albedo_float,albedo_float,albedo_float);
+	ALBEDO = shadow_ramp;
+	//evaluate_color_ramp(mask_value);
+
+	ALBEDO = gamma_correction;
+
+
+	    // Light direction
+    vec3 to_light = rotated_light_coords - world_pos;
+    float dist = length(to_light);
+    vec3 light_dir = to_light / dist;
+	    // Check if facing light
+    float facing = dot(world_normal, rotated_light_coords);
+
+
+	if(!(facing > 0.0)) {
+        ALBEDO = vec3(dist / 100.0); // Store distance
+    } else {
+        ALBEDO = vec3(1.0); // Max distance = shadowed
+    }
 }
+
+/*
+    // Get world position and normal
+    vec3 world_pos = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
+    vec3 world_normal = texture(normal_map, UV).xyz * 2.0 - 1.0;
+
+    // Light direction
+    vec3 to_light = light_pos - world_pos;
+    float dist = length(to_light);
+    vec3 light_dir = to_light / dist;
+
+    // Create light-perpendicular basis
+    vec3 light_forward = normalize(light_dir);
+    vec3 light_right = normalize(cross(light_forward, vec3(0, 1, 0)));
+    vec3 light_up = cross(light_right, light_forward);
+
+    // Transform world_pos to light space
+    vec3 relative_pos = world_pos - light_pos;
+    vec2 light_space_xy = vec2(
+        dot(relative_pos, light_right),
+        dot(relative_pos, light_up)
+    );
+
+    // Check if facing light
+    float facing = dot(world_normal, light_dir);
+
+    if(facing > 0.0) {
+        ALBEDO = vec3(dist / 100.0); // Store distance
+    } else {
+        ALBEDO = vec3(1.0); // Max distance = shadowed
+    }
+	*/
