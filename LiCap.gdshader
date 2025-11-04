@@ -477,7 +477,7 @@ float albedo_float = shadow_map.r;
 	ALBEDO = shadow_map;
 	//evaluate_color_ramp(mask_value);
 
-	//ALBEDO = gamma_correction;
+	ALBEDO = gamma_correction;
 	/*
 		if(!(facing > 0.0)) {
 	        ALBEDO = vec3(dist / 100.0); // Store distance
