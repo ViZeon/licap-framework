@@ -1,4 +1,4 @@
-### [Under Construction]
+### [Under Construction] [ This project is being developer as a separate engine here: https://github.com/ViZeon/HollowsGraphicsEngine]
 
 
 HotWire Nine [LiCap Framework] is a lighting model inspired by MatCap tech, but in light space rather than screen space.
@@ -15,3 +15,4 @@ HotWire Nine [LiCap Framework] is a lighting model inspired by MatCap tech, but 
 ### Warning [creating new materials]
 because of abstraction limitations, the LiCap shader **Cannot** use the default lights in Godot.
 - To **use the light with the new materials**: locate the "LiCapLight" from the hirarchy, you will find the parameters of its custom script, you need to **drag your new material to the list**, so the light can update its location
+
