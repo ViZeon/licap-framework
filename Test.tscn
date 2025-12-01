@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dcuqid155ecjx"]
+[gd_scene load_steps=22 format=3 uid="uid://dcuqid155ecjx"]
 
 [ext_resource type="Material" uid="uid://y1efon4wxvbi" path="res://Src/LiCap.tres" id="2_8tn2x"]
 [ext_resource type="Script" uid="uid://dlux4mh2cxpb3" path="res://Scripts/Systems/Lighting/scene_light_control.gd" id="3_2au82"]
@@ -13,6 +13,10 @@
 [ext_resource type="Material" uid="uid://dd6usbfe6w07n" path="res://Src/Testing/Materials/comparison-sniper_standard_material_3d.tres" id="10_cqdos"]
 [ext_resource type="Material" uid="uid://b3mnvcps1n131" path="res://Src/Testing/Materials/LiCap_Sniper_Rifle.tres" id="10_r6p7k"]
 [ext_resource type="Material" uid="uid://bnkgxkbgsn2k1" path="res://Src/LiCap_SkinGradient_04.tres" id="10_rc7cs"]
+[ext_resource type="Shader" uid="uid://2fb037six8ik" path="res://FallOff.gdshader" id="11_d1b21"]
+[ext_resource type="Texture2D" uid="uid://dm588ru6r2e7d" path="res://Src/Testing/Dante1/t_dante_head_d.tga" id="12_rdfvj"]
+[ext_resource type="Texture2D" uid="uid://8y08p07f8m56" path="res://Src/Testing/MatCaps/Prototype_LiCap.jpg" id="13_iw7q2"]
+[ext_resource type="Texture2D" uid="uid://dtcxy5jbbgy77" path="res://Src/Testing/Dante1/t_dante_head_n.tga" id="14_q8vq6"]
 
 [sub_resource type="GDScript" id="GDScript_8tn2x"]
 script/source = "@tool
@@ -51,6 +55,25 @@ ring_segments = 12
 [sub_resource type="SphereShape3D" id="SphereShape3D_8tn2x"]
 radius = 1.083
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ilduj"]
+render_priority = 0
+shader = ExtResource("11_d1b21")
+shader_parameter/tangent_normal_map = ExtResource("14_q8vq6")
+shader_parameter/normal_map_strength = 1.0
+shader_parameter/diffuse_texture = ExtResource("12_rdfvj")
+shader_parameter/licap_texture = ExtResource("13_iw7q2")
+shader_parameter/fresnel_intensity = 0.0
+shader_parameter/light_position_w = Vector3(0, 0, 0)
+shader_parameter/light_range = 5.0
+shader_parameter/liCap_rotation = 0.0
+shader_parameter/gamma = 2.2
+shader_parameter/gradient_points_count = 3
+shader_parameter/gradient_point_list = PackedColorArray(0, 0, 0, 0, 1.0237244, 1.0237244, 1.0237244, 0.7372549, 1, 1, 1, 1)
+shader_parameter/easing_type = 0
+shader_parameter/normal_smoothing = 0.0
+shader_parameter/max_derivative = 0.1
+shader_parameter/use_custom_light = false
+
 [node name="Node3D" type="Node3D"]
 
 [node name="CSGTorus3D" type="CSGTorus3D" parent="."]
@@ -81,7 +104,7 @@ collision_set = true
 metadata/_custom_type_script = "uid://yb3tmhg57mvr"
 
 [node name="LiCapLight" type="Node3D" parent="." node_paths=PackedStringArray("light_control")]
-transform = Transform3D(0.999997, -0.00232129, 0, 0.00232129, 0.999997, 0, 0, 0, 1, -0.17862922, 1.8944639, -0.14382051)
+transform = Transform3D(0.999997, -0.00232129, 0, 0.00232129, 0.999997, 0, 0, 0, 1, -0.26711375, 2.0010874, 0.05528766)
 script = ExtResource("5_aq4fw")
 licap_mat = Array[Material]([ExtResource("5_cqdos"), ExtResource("10_r6p7k"), ExtResource("7_r6p7k"), ExtResource("2_8tn2x"), ExtResource("10_rc7cs")])
 light_var_name = "light_position_w"
@@ -105,6 +128,16 @@ surface_material_override/2 = ExtResource("6_ivycn")
 surface_material_override/3 = ExtResource("6_ivycn")
 surface_material_override/4 = ExtResource("6_ivycn")
 surface_material_override/5 = ExtResource("10_rc7cs")
+
+[node name="Dante4" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0.2587092)
+mesh = ExtResource("7_q1uvj")
+surface_material_override/0 = ExtResource("6_ivycn")
+surface_material_override/1 = ExtResource("6_ivycn")
+surface_material_override/2 = ExtResource("6_ivycn")
+surface_material_override/3 = ExtResource("6_ivycn")
+surface_material_override/4 = ExtResource("6_ivycn")
+surface_material_override/5 = SubResource("ShaderMaterial_ilduj")
 
 [node name="StressTest" type="Node3D" parent="."]
 visible = false
@@ -456,6 +489,11 @@ skeleton = NodePath("../../..")
 [node name="Text_HotwireNine" type="Label3D" parent="comparison/Custom"]
 transform = Transform3D(-8.52805e-09, 0, -1, 0, 0.195099, 0, 0.195099, 0, -4.37114e-08, 0, 2.05916, 0.0146884)
 text = "Hotwire Nine"
+
+[node name="Text_HotwireNine_NativeLights" type="Label3D" parent="comparison/Custom"]
+transform = Transform3D(-8.52805e-09, 0, -1, 0, 0.195099, 0, 0.195099, 0, -4.37114e-08, 0, 2.05916, 0.2538737)
+text = "Hotwire Nine 
+Godot Lights"
 
 [node name="R7-xSniper-rifle2" type="MeshInstance3D" parent="comparison/Custom"]
 transform = Transform3D(0.25, 0, -0.433013, 0, 0.5, 0, 0.433013, 0, 0.25, 0, 0, 0.0483729)

@@ -47,7 +47,6 @@ varying vec3 binormal_w;
 varying vec3 shadow_map;
 
 
-
 // RGB to HSL conversion (using Luminance instead of Value)
 vec3 rgb2hsl(vec3 c) {
     float maxC = max(max(c.r, c.g), c.b);
@@ -361,7 +360,7 @@ void fragment() {
 
 	// Add after your smooth_normal calculation
 	vec3 view_dir = normalize(CAMERA_POSITION_WORLD - world_pos);
-	vec3 view_right = normalize(cross(vec3(0.0, 1.0, 0.0), view_dir));
+	vec3 view_right = normalize(cross(world_pos, view_dir));
 	vec3 view_up = cross(view_dir, view_right);
 
 	// MatCap UV coordinates
