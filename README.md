@@ -18,4 +18,4 @@ because of abstraction limitations, the LiCap shader **Cannot** use the default 
 - To **use the light with the new materials**: locate the "LiCapLight" from the hirarchy, you will find the parameters of its custom script, you need to **drag your new material to the list**, so the light can update its location
 
 ### What a LiCap is and how it works:
-[LiCap Explanation] (LiCap_Explained.jpg)
+[LiCap Explanation](LiCap_Explained.jpg)
